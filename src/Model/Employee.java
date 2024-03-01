@@ -1,6 +1,6 @@
-/*
+package Model;/*
  * 
- * This is the definition of the Employee object
+ * This is the definition of the Model.Employee object
  * 
  * */
 
@@ -14,7 +14,7 @@ public class Employee{
 	private double salary;
 	private boolean fullTime;
 
-	// Create Employee with no details
+	// Create Model.Employee with no details
 	public Employee() {
 		this.employeeId = 0;
 		this.pps = "";
@@ -24,9 +24,9 @@ public class Employee{
 		this.department = "";
 		this.salary = 0;
 		this.fullTime = false;
-	}//end Employee with no details
+	}//end Model.Employee with no details
 
-	// Create Employee with details
+	// Create Model.Employee with details
 	public Employee(int employeeId, String pps, String surname, String firstName, char gender, String department, double salary,
 			boolean fullTime) {
 		this.employeeId = employeeId;
@@ -37,7 +37,7 @@ public class Employee{
 		this.department = department;
 		this.salary = salary;
 		this.fullTime = fullTime;
-	}// end Employee with details
+	}// end Model.Employee with details
 
 	// Getter methods
 	public int getEmployeeId() {
@@ -105,7 +105,7 @@ public class Employee{
 		this.fullTime = fullTime;
 	}
 
-	// Display Employee details
+	// Display Model.Employee details
 	public String toString() {
 		String bool = "";
 		if (fullTime)
@@ -113,8 +113,8 @@ public class Employee{
 		else
 			bool = "No";
 
-		return "Employee ID: " + this.employeeId + "\nPPS Number: " + this.pps + "\nSurname: " + this.surname
+		return "Model.Employee ID: " + this.employeeId + "\nPPS Number: " + this.pps + "\nSurname: " + this.surname
 				+ "\nFirst Name: " + this.firstName + "\nGender: " + this.gender + "\nDepartment: " + this.department + "\nSalary: " + this.salary
 				+ "\nFull Time: " + bool;
 	}// end toString
-}// end class Employee
+}// end class Model.Employee

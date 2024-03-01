@@ -1,4 +1,4 @@
-/*
+package View;/*
  * 
  * This is a class for limiting input in text fields
  * 
@@ -14,12 +14,12 @@ class JTextFieldLimit extends PlainDocument {
   JTextFieldLimit(int limit) {
     super();
     this.limit = limit;
-  }// end JTextFieldLimit
+  }// end View.JTextFieldLimit
 
   JTextFieldLimit(int limit, boolean upper) {
     super();
     this.limit = limit;
-  }// end JTextFieldLimit
+  }// end View.JTextFieldLimit
 
   public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
     if (str == null)

@@ -1,6 +1,6 @@
-/*
+package Model;/*
  * 
- * This is a Random Access Employee record definition
+ * This is a Random Access Model.Employee record definition
  * 
  * */
 
@@ -9,20 +9,20 @@ import java.io.IOException;
 
 public class RandomAccessEmployeeRecord extends Employee
 {  
-    public static final int SIZE = 175; // Size of each RandomAccessEmployeeRecord object
+    public static final int SIZE = 175; // Size of each Model.RandomAccessEmployeeRecord object
 
    // Create empty record
    public RandomAccessEmployeeRecord()
    {
       this(0, "","","",'\0', "", 0.0, false);
-   } // end RandomAccessEmployeeRecord
+   } // end Model.RandomAccessEmployeeRecord
 
    // Initialize record with details
    public RandomAccessEmployeeRecord( int employeeId, String pps, String surname, String firstName, char gender, 
 		   String department, double salary, boolean fullTime)
    {
       super(employeeId, pps, surname, firstName, gender, department, salary, fullTime);
-   } // end RandomAccessEmployeeRecord
+   } // end Model.RandomAccessEmployeeRecord
 
    // Read a record from specified RandomAccessFile
    public void read( RandomAccessFile file ) throws IOException
@@ -78,4 +78,4 @@ public class RandomAccessEmployeeRecord extends Employee
       buffer.setLength( 20 );
       file.writeChars( buffer.toString() );
    } // end writeName
-} // end class RandomAccessEmployeeRecord
+} // end class Model.RandomAccessEmployeeRecord

@@ -1,13 +1,11 @@
-/*
+package Model;/*
  * 
  * This class is for accessing, creating and modifying records in a file
  * 
  * */
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
@@ -290,4 +288,4 @@ public class RandomFile {
 
 		return someoneToDisplay;
 	}// end isSomeoneToDisplay
-}// end class RandomFile
+}// end class Model.RandomFile

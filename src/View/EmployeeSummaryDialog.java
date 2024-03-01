@@ -1,6 +1,6 @@
-/*
+package View;/*
  * 
- * This is the summary dialog for displaying all Employee details
+ * This is the summary dialog for displaying all Model.Employee details
  * 
  * */
 
@@ -32,7 +32,7 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 	JButton back;
 	
 	public EmployeeSummaryDialog(Vector<Object> allEmployees) {
-		setTitle("Employee Summary");
+		setTitle("Model.Employee Summary");
 		setModal(true);
 		this.allEmployees = allEmployees;
 
@@ -107,7 +107,7 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		
 		summaryDialog.add(buttonPanel,"growx, pushx, wrap");
 		summaryDialog.add(scrollPane,"growx, pushx, wrap");
-		scrollPane.setBorder(BorderFactory.createTitledBorder("Employee Details"));
+		scrollPane.setBorder(BorderFactory.createTitledBorder("Model.Employee Details"));
 		
 		return summaryDialog;
 	}// end summaryPane
@@ -135,4 +135,4 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 			return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		}// end getTableCellRendererComponent
 	}// DefaultTableCellRenderer
-}// end class EmployeeSummaryDialog
+}// end class View.EmployeeSummaryDialog
