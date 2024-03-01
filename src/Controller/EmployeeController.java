@@ -6,7 +6,11 @@ import View.AddRecordDialog;
 import View.EmployeeDetails;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.Random;
 
 public class EmployeeController {
@@ -22,6 +26,8 @@ public class EmployeeController {
     Employee currentEmployee;
 
     private EmployeeDetails employeeDetailsView;
+    // display files in File Chooser only with extension .dat
+    private FileNameExtensionFilter datfilter = new FileNameExtensionFilter("dat files (*.dat)", "dat");
 
     public EmployeeController(EmployeeDetails employeeDetailsView){
         this.employeeDetailsView = employeeDetailsView;
@@ -209,6 +215,171 @@ public class EmployeeController {
         return ppsExist;
     }// end correctPPS
 
+public void testing(){
+        System.out.println("This is a test");
+}
 
+    public void openFile() {
+        final JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Open");
+        // display files in File Chooser only with extension .dat
+        fc.setFileFilter(datfilter);
+        File newFile; // holds opened file name and path
+        // if old file is not empty or changes has been made, offer user to save
+        // old file
+        if (file.length() != 0 || change) {
+            int returnVal = JOptionPane.showOptionDialog(employeeDetailsView, "Do you want to save changes?", "Save",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+            // if user wants to save file, save it
+            if (returnVal == JOptionPane.YES_OPTION) {
+                saveFile();// save file
+            } // end if
+        } // end if
+
+        int returnVal = fc.showOpenDialog(employeeDetailsView);
+        // if file been chosen, open it
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            newFile = fc.getSelectedFile();
+            // if old file wasn't saved and its name is generated file name,
+            // delete this file
+            if (file.getName().equals(generatedFileName))
+                file.delete();// delete file
+            file = newFile;// assign opened file to file
+            // open file for reading
+            application.openReadFile(file.getAbsolutePath());
+            firstRecord();// look for first record
+            employeeDetailsView.displayRecords(currentEmployee);
+            application.closeReadFile();// close file for reading
+        } // end if
+    }// end openFile
+
+    private void saveFile() {
+        // if file name is generated file name, save file as 'save as' else save
+        // changes to file
+        if (file.getName().equals(generatedFileName))
+            saveFileAs();// save file as 'save as'
+        else {
+            // if changes has been made to text field offer user to save these
+            // changes
+            if (change) {
+                int returnVal = JOptionPane.showOptionDialog(employeeDetailsView, "Do you want to save changes?", "Save",
+                        JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                // save changes if user choose this option
+                if (returnVal == JOptionPane.YES_OPTION) {
+                    // save changes if ID field is not empty
+                    if (!employeeDetailsView.getIdField().getText().equals("")) {
+                        // open file for writing
+                        application.openWriteFile(file.getAbsolutePath());
+                        // get changes for current Model.Employee
+                        currentEmployee = employeeDetailsView.getChangedDetails(); //May need to modify this method
+                        // write changes to file for corresponding Model.Employee
+                        // record
+                        application.changeRecords(currentEmployee, currentByteStart);
+                        application.closeWriteFile();// close file for writing
+                    } // end if
+                } // end if
+            } // end if
+
+            employeeDetailsView.displayRecords(currentEmployee);
+            employeeDetailsView.setEnabled(false);
+        } // end else
+    }// end saveFile
+
+    private void saveChanges() {
+        int returnVal = JOptionPane.showOptionDialog(employeeDetailsView, "Do you want to save changes to current Model.Employee?", "Save",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+        // if user choose to save changes, save changes
+        if (returnVal == JOptionPane.YES_OPTION) {
+            // open file for writing
+            application.openWriteFile(file.getAbsolutePath());
+            // get changes for current Model.Employee
+            currentEmployee = employeeDetailsView.getChangedDetails(); //Again may need to modify this method
+            // write changes to file for corresponding Model.Employee record
+            application.changeRecords(currentEmployee, currentByteStart);
+            application.closeWriteFile();// close file for writing
+            changesMade = false;// state that all changes has bee saved
+        } // end if
+        employeeDetailsView.displayRecords(currentEmployee);
+        employeeDetailsView.setEnabled(false);
+    }// end saveChanges
+
+    // save file as 'save as'
+    //Potentially move elsewhere or adapt
+    private void saveFileAs() {
+        final JFileChooser fc = new JFileChooser();
+        File newFile;
+        String defaultFileName = "new_Employee.dat";
+        fc.setDialogTitle("Save As");
+        // display files only with .dat extension
+        fc.setFileFilter(datfilter);
+        fc.setApproveButtonText("Save");
+        fc.setSelectedFile(new File(defaultFileName));
+
+        int returnVal = fc.showSaveDialog(employeeDetailsView);
+        // if file has chosen or written, save old file in new file
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            newFile = fc.getSelectedFile();
+            // check for file name
+            if (!checkFileName(newFile)) {
+                // add .dat extension if it was not there
+                newFile = new File(newFile.getAbsolutePath() + ".dat");
+                // create new file
+                application.createFile(newFile.getAbsolutePath());
+            } // end id
+            else
+                // create new file
+                application.createFile(newFile.getAbsolutePath());
+
+            try {// try to copy old file to new file
+                Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                // if old file name was generated file name, delete it
+                if (file.getName().equals(generatedFileName))
+                    file.delete();// delete file
+                file = newFile;// assign new file to file
+            } // end try
+            catch (IOException e) {
+            } // end catch
+        } // end if
+        changesMade = false;
+    }// end saveFileAs
+
+    private boolean checkFileName(File fileName) {
+        boolean checkFile = false;
+        int length = fileName.toString().length();
+
+        // check if last characters in file name is .dat
+        if (fileName.toString().charAt(length - 4) == '.' && fileName.toString().charAt(length - 3) == 'd'
+                && fileName.toString().charAt(length - 2) == 'a' && fileName.toString().charAt(length - 1) == 't')
+            checkFile = true;
+        return checkFile;
+    }// end checkFileName
+
+    public void getFirstRecord(){
+        if (employeeDetailsView.checkInput() && !employeeDetailsView.checkForChanges()) {
+            firstRecord();
+            employeeDetailsView.displayRecords(currentEmployee);
+        }
+    }
+
+    public void getPreviousRecord(){
+        if (employeeDetailsView.checkInput() && !employeeDetailsView.checkForChanges()) {
+            previousRecord();
+            employeeDetailsView.displayRecords(currentEmployee);
+        }
+    }
+
+    public void getNextRecord(){
+        if (employeeDetailsView.checkInput() && !employeeDetailsView.checkForChanges()) {
+            nextRecord();
+            employeeDetailsView.displayRecords(currentEmployee);
+        }
+    }
+
+    public void getLastRecord(){
+        if (employeeDetailsView.checkInput() && !employeeDetailsView.checkForChanges()) {
+            lastRecord();
+            employeeDetailsView.displayRecords(currentEmployee);
+        }
+    }
 
 }

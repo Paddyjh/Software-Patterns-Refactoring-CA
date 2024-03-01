@@ -99,6 +99,9 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		createAndShowGUI();
 	}
 
+	public JTextField getIdField() {
+		return idField;
+	}
 
 	// initialize menu bar
 	private JMenuBar menuBar() {
@@ -119,7 +122,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		menuBar.add(navigateMenu);
 		menuBar.add(closeMenu);
 
-		fileMenu.add(open = new JMenuItem("Open")).addActionListener(this);
+		fileMenu.add(open = new JMenuItem("Open")).addActionListener(e -> controller.openFile());
 		open.setMnemonic(KeyEvent.VK_O);
 		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
 		fileMenu.add(save = new JMenuItem("Save")).addActionListener(this);
@@ -138,13 +141,13 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		recordMenu.add(delete = new JMenuItem("Delete Record")).addActionListener(this);
 
 		navigateMenu.add(firstItem = new JMenuItem("First"));
-		firstItem.addActionListener(this);
+		firstItem.addActionListener(e -> controller.getFirstRecord());
 		navigateMenu.add(prevItem = new JMenuItem("Previous"));
-		prevItem.addActionListener(this);
+		prevItem.addActionListener(e -> controller.getPreviousRecord());
 		navigateMenu.add(nextItem = new JMenuItem("Next"));
-		nextItem.addActionListener(this);
+		nextItem.addActionListener(e -> controller.getNextRecord());
 		navigateMenu.add(lastItem = new JMenuItem("Last"));
-		lastItem.addActionListener(this);
+		lastItem.addActionListener(e -> controller.getLastRecord());
 		navigateMenu.addSeparator();
 		navigateMenu.add(searchById = new JMenuItem("Search by ID")).addActionListener(this);
 		navigateMenu.add(searchBySurname = new JMenuItem("Search by Surname")).addActionListener(this);
@@ -196,25 +199,25 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		navigPanel.add(first = new JButton(new ImageIcon(
 				new ImageIcon(getClass().getResource("/assets/first.png")).getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
 		first.setPreferredSize(new Dimension(17, 17));
-		first.addActionListener(this);
+		first.addActionListener(e -> controller.getFirstRecord());
 		first.setToolTipText("Display first Record");
 
 		navigPanel.add(previous = new JButton(new ImageIcon(new ImageIcon(getClass().getResource("/assets/prev.png")).getImage()
 				.getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
 		previous.setPreferredSize(new Dimension(17, 17));
-		previous.addActionListener(this);
+		previous.addActionListener(e -> controller.getNextRecord());
 		previous.setToolTipText("Display next Record");
 
 		navigPanel.add(next = new JButton(new ImageIcon(
 				new ImageIcon(getClass().getResource("/assets/next.png")).getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
 		next.setPreferredSize(new Dimension(17, 17));
-		next.addActionListener(this);
+		next.addActionListener(e -> controller.getPreviousRecord());
 		next.setToolTipText("Display previous Record");
 
 		navigPanel.add(last = new JButton(new ImageIcon(
 				new ImageIcon(getClass().getResource("/assets/last.png")).getImage().getScaledInstance(17, 17, java.awt.Image.SCALE_SMOOTH))));
 		last.setPreferredSize(new Dimension(17, 17));
-		last.addActionListener(this);
+		last.addActionListener(e -> controller.getLastRecord());
 		last.setToolTipText("Display last Record");
 
 		return navigPanel;
@@ -224,7 +227,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		JPanel buttonPanel = new JPanel();
 
 		buttonPanel.add(add = new JButton("Add Record"), "growx, pushx");
-		add.addActionListener(this);
+		add.addActionListener(e -> controller.testing()); //change this to proper call
 		add.setToolTipText("Add new Model.Employee Record");
 		buttonPanel.add(edit = new JButton("Edit Record"), "growx, pushx");
 		edit.addActionListener(this);
@@ -557,7 +560,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 	// get values from text fields and create Model.Employee object
 	//Potentially move elsewhere or adapt
-	private Employee getChangedDetails() {
+	public Employee getChangedDetails() {
 		boolean fullTime = false;
 		Employee theEmployee;
 		if (((String) fullTimeCombo.getSelectedItem()).equalsIgnoreCase("Yes"))
@@ -731,7 +734,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	}// end checkFileName
 
 	// check if any changes text field where made
-	private boolean checkForChanges() {
+	public boolean checkForChanges() {
 		boolean anyChanges = false;
 		// if changes where made, allow user to save there changes
 		if (change) {
@@ -749,7 +752,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	}// end checkForChanges
 
 	// check for input in text fields
-	private boolean checkInput() {
+	public boolean checkInput() {
 		boolean valid = true;
 		// if any of inputs are in wrong format, colour text field and display
 		// message
@@ -1039,10 +1042,12 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		if (e.getSource() == closeApp) {
 			if (checkInput() && !checkForChanges())
 				exitApp();
-		} else if (e.getSource() == open) {
-			if (checkInput() && !checkForChanges())
-				openFile();
-		} else if (e.getSource() == save) {
+		}
+//		else if (e.getSource() == open) {
+//			if (checkInput() && !checkForChanges())
+//				openFile();
+//		}
+		else if (e.getSource() == save) {
 			if (checkInput() && !checkForChanges())
 				saveFile();
 			change = false;
@@ -1063,28 +1068,28 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		else if (e.getSource() == saveChange) {
 			if (checkInput() && !checkForChanges())
 				;
-		} else if (e.getSource() == cancelChange)
+		} else if (e.getSource() == cancelChange){
 			cancelChange();
-		else if (e.getSource() == firstItem || e.getSource() == first) {
-			if (checkInput() && !checkForChanges()) {
-				firstRecord();
-				displayRecords(currentEmployee);
-			}
-		} else if (e.getSource() == prevItem || e.getSource() == previous) {
-			if (checkInput() && !checkForChanges()) {
-				previousRecord();
-				displayRecords(currentEmployee);
-			}
-		} else if (e.getSource() == nextItem || e.getSource() == next) {
-			if (checkInput() && !checkForChanges()) {
-				nextRecord();
-				displayRecords(currentEmployee);
-			}
-		} else if (e.getSource() == lastItem || e.getSource() == last) {
-			if (checkInput() && !checkForChanges()) {
-				lastRecord();
-				displayRecords(currentEmployee);
-			}
+//		else if (e.getSource() == firstItem || e.getSource() == first) {
+//			if (checkInput() && !checkForChanges()) {
+//				firstRecord();
+//				displayRecords(currentEmployee);
+//			}
+//		} else if (e.getSource() == prevItem || e.getSource() == previous) {
+//			if (checkInput() && !checkForChanges()) {
+//				previousRecord();
+//				displayRecords(currentEmployee);
+//			}
+//		} else if (e.getSource() == nextItem || e.getSource() == next) {
+//			if (checkInput() && !checkForChanges()) {
+//				nextRecord();
+//				displayRecords(currentEmployee);
+//			}
+//		} else if (e.getSource() == lastItem || e.getSource() == last) {
+//			if (checkInput() && !checkForChanges()) {
+//				lastRecord();
+//				displayRecords(currentEmployee);
+//			}
 		} else if (e.getSource() == listAll || e.getSource() == displayAll) {
 			if (checkInput() && !checkForChanges())
 				if (isSomeoneToDisplay())
