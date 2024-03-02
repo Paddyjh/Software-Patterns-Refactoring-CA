@@ -81,7 +81,6 @@ public class EmployeeController {
     public void addEmployeeRecord(AddRecordDialog view) {
         Employee theEmployee = view.returnEmployee();
         this.currentEmployee = theEmployee;
-//        this.parent.addRecord(theEmployee);
 
         application.openWriteFile(file.getAbsolutePath());
         // write into a file
@@ -207,8 +206,6 @@ public class EmployeeController {
 
     // check for correct PPS format and look if PPS already in use
     public boolean correctPps(String pps, long currentByte) {
-        System.out.println("Current Byte : " + currentByte);
-        System.out.println("Current Byte Start : " + currentByteStart);
 
         boolean ppsExist = false;
         // check for correct PPS format based on assignment description

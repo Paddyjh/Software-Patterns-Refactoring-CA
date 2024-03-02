@@ -107,7 +107,7 @@ public class EmployeeSummaryDialog extends JDialog {
 		
 		summaryDialog.add(buttonPanel,"growx, pushx, wrap");
 		summaryDialog.add(scrollPane,"growx, pushx, wrap");
-		scrollPane.setBorder(BorderFactory.createTitledBorder("Model.Employee Details"));
+		scrollPane.setBorder(BorderFactory.createTitledBorder("Employee Details"));
 		
 		return summaryDialog;
 	}// end summaryPane
