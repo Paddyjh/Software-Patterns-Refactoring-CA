@@ -17,7 +17,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -178,7 +177,7 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 		searchPanel.add(searchId = new JButton("Go"),
 				"width 35:35:35, height 20:20:20, growx, pushx, wrap");
 		searchId.addActionListener(e -> controller.searchEmployeeById());
-		searchId.setToolTipText("Search Model.Employee By ID");
+		searchId.setToolTipText("Search Employee By ID");
 
 		searchPanel.add(new JLabel("Search by Surname:"), "growx, pushx");
 		searchPanel.add(searchBySurnameField = new JTextField(20), "width 200:200:200, growx, pushx");
@@ -187,7 +186,7 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 		searchPanel.add(
 				searchSurname = new JButton("Go"), "width 35:35:35, height 20:20:20, growx, pushx, wrap");
 		searchSurname.addActionListener(e -> controller.searchEmployeeBySurname());
-		searchSurname.setToolTipText("Search Model.Employee By Surname");
+		searchSurname.setToolTipText("Search Employee By Surname");
 
 		return searchPanel;
 	}// end searchPanel

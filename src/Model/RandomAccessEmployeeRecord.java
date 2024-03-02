@@ -14,15 +14,20 @@ public class RandomAccessEmployeeRecord extends Employee
    // Create empty record
    public RandomAccessEmployeeRecord()
    {
-      this(0, "","","",'\0', "", 0.0, false);
+      this(createEmpty());
    } // end Model.RandomAccessEmployeeRecord
 
    // Initialize record with details
-   public RandomAccessEmployeeRecord( int employeeId, String pps, String surname, String firstName, char gender, 
-		   String department, double salary, boolean fullTime)
-   {
-      super(employeeId, pps, surname, firstName, gender, department, salary, fullTime);
-   } // end Model.RandomAccessEmployeeRecord
+   public RandomAccessEmployeeRecord(Employee employee) {
+      super(employee.getEmployeeId(), employee.getPps(), employee.getSurname(),
+              employee.getFirstName(), employee.getGender(), employee.getDepartment(),
+              employee.getSalary(), employee.getFullTime());
+   }
+
+   public static Employee createEmpty() {
+      // Assuming default values. Adjust these based on your application's needs.
+      return new Employee(0, "", "", "", '\0', "", 0.0, false);
+   }
 
    // Read a record from specified RandomAccessFile
    public void read( RandomAccessFile file ) throws IOException

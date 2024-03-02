@@ -315,7 +315,7 @@ public class EmployeeController {
 
     // save changes to current Employee
     private void saveChanges() {
-        int returnVal = JOptionPane.showOptionDialog(employeeDetailsView, "Do you want to save changes to current Model.Employee?", "Save",
+        int returnVal = JOptionPane.showOptionDialog(employeeDetailsView, "Do you want to save changes to current Employee?", "Save",
                 JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
         // if user choose to save changes, save changes
         if (returnVal == JOptionPane.YES_OPTION) {
