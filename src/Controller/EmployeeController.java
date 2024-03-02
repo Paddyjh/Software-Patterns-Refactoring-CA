@@ -2,10 +2,7 @@ package Controller;
 
 import Model.Employee;
 import Model.RandomFile;
-import View.AddRecordDialog;
-import View.EmployeeDetails;
-import View.SearchByIdDialog;
-import View.SearchBySurnameDialog;
+import View.*;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -15,6 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.Random;
+import java.util.Vector;
 
 public class EmployeeController {
 
@@ -559,6 +557,40 @@ public void testing(){
         employeeDetailsView.searchByIdField.setBackground(Color.WHITE);
         employeeDetailsView.searchByIdField.setText("");
     }// end searchEmployeeByID
+
+    private Vector<Object> getAllEmloyees() {
+        // vector of Model.Employee objects
+        Vector<Object> allEmployee = new Vector<Object>();
+        Vector<Object> empDetails;// vector of each employee details
+        long byteStart = currentByteStart;
+        int firstId;
+
+        firstRecord();// look for first record
+        firstId = currentEmployee.getEmployeeId();
+        // loop until all Employees are added to vector
+        do {
+            empDetails = new Vector<Object>();
+            empDetails.addElement(new Integer(currentEmployee.getEmployeeId()));
+            empDetails.addElement(currentEmployee.getPps());
+            empDetails.addElement(currentEmployee.getSurname());
+            empDetails.addElement(currentEmployee.getFirstName());
+            empDetails.addElement(new Character(currentEmployee.getGender()));
+            empDetails.addElement(currentEmployee.getDepartment());
+            empDetails.addElement(new Double(currentEmployee.getSalary()));
+            empDetails.addElement(new Boolean(currentEmployee.getFullTime()));
+
+            allEmployee.addElement(empDetails);
+            nextRecord();// look for next record
+        } while (firstId != currentEmployee.getEmployeeId());// end do - while
+        currentByteStart = byteStart;
+
+        return allEmployee;
+    }// end getAllEmployees
+
+    public void displayEmployeeSummaryDialog(){
+        if (isSomeoneToDisplay())
+            new EmployeeSummaryDialog(getAllEmloyees());
+    }
 
 
 

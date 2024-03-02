@@ -164,7 +164,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		navigateMenu.addSeparator();
 		navigateMenu.add(searchById = new JMenuItem("Search by ID")).addActionListener(this);
 		navigateMenu.add(searchBySurname = new JMenuItem("Search by Surname")).addActionListener(this);
-		navigateMenu.add(listAll = new JMenuItem("List all Records")).addActionListener(this);
+		navigateMenu.add(listAll = new JMenuItem("List all Records")).addActionListener(e -> controller.displayEmployeeSummaryDialog());
 
 		closeMenu.add(closeApp = new JMenuItem("Close")).addActionListener(this);
 		closeApp.setMnemonic(KeyEvent.VK_F4);
@@ -246,10 +246,10 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		edit.addActionListener(e -> controller.editDetails());
 		edit.setToolTipText("Edit current Employee");
 		buttonPanel.add(deleteButton = new JButton("Delete Record"), "growx, pushx, wrap");
-		deleteButton.addActionListener(this);
+		deleteButton.addActionListener(e -> controller.deleteRecord());
 		deleteButton.setToolTipText("Delete current Employee");
 		buttonPanel.add(displayAll = new JButton("List all Records"), "growx, pushx");
-		displayAll.addActionListener(e -> controller.deleteRecord());
+		displayAll.addActionListener(e -> controller.displayEmployeeSummaryDialog());
 		displayAll.setToolTipText("List all Registered Employees");
 
 		return buttonPanel;
@@ -1088,7 +1088,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 //				;
 //		}
 
-		else if (e.getSource() == cancelChange){
+		else if (e.getSource() == cancelChange) {
 			cancelChange();
 //		else if (e.getSource() == firstItem || e.getSource() == first) {
 //			if (checkInput() && !checkForChanges()) {
@@ -1110,11 +1110,15 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 //				lastRecord();
 //				displayRecords(currentEmployee);
 //			}
-		} else if (e.getSource() == listAll || e.getSource() == displayAll) {
-			if (checkInput() && !controller.checkForChanges())
-				if (controller.isSomeoneToDisplay())
-					displayEmployeeSummaryDialog();
-		} else if (e.getSource() == create || e.getSource() == add) {
+//		} else if (e.getSource() == listAll || e.getSource() == displayAll) {
+//			if (checkInput() && !controller.checkForChanges())
+//				if (controller.isSomeoneToDisplay())
+//					displayEmployeeSummaryDialog();
+//
+//
+//		}
+		}
+		else if (e.getSource() == create || e.getSource() == add) {
 			if (checkInput() && !controller.checkForChanges())
 				new AddRecordDialog(EmployeeDetails.this, this.controller);
 		}
