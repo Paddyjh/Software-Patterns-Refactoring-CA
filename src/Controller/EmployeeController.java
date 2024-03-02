@@ -34,6 +34,11 @@ public class EmployeeController {
         createRandomFile();// create random file name
     }
 
+    public void setChange(boolean change){
+        this.change = change;
+    }
+
+
     private void createRandomFile() {
         generatedFileName = getFileName() + ".dat";
         // assign generated file name to file
@@ -63,6 +68,7 @@ public class EmployeeController {
             // Call model methods to save the Employee object
             addEmployeeRecord(view);
             view.dispose();
+            changesMade = true;
         } else {
             // Notify view to display error message or highlight fields
         }
@@ -192,6 +198,9 @@ public class EmployeeController {
     }// end isSomeoneToDisplay
 
     public boolean correctPps(String pps, long currentByte) {
+        System.out.println("Current Byte : " + currentByte);
+        System.out.println("Current Byte Start : " + currentByteStart);
+
         boolean ppsExist = false;
         // check for correct PPS format based on assignment description
         if (pps.length() == 8 || pps.length() == 9) {
@@ -203,7 +212,11 @@ public class EmployeeController {
                 // open file for reading
                 application.openReadFile(file.getAbsolutePath());
                 // look in file is PPS already in use
-                ppsExist = application.isPpsExist(pps, currentByte);
+                if(currentByte == -2) {
+                    ppsExist = application.isPpsExist(pps, currentByteStart);
+                } else {
+                    ppsExist = application.isPpsExist(pps, currentByte);
+                }
                 application.closeReadFile();// close file for reading
             } // end if
             else
@@ -252,6 +265,15 @@ public void testing(){
             application.closeReadFile();// close file for reading
         } // end if
     }// end openFile
+
+    public void saveFileController(){
+        saveFile();
+        change = false;
+    }
+    public void saveFileAsController(){
+        saveFileAs();
+        change = false;
+    }
 
     public void saveFile() {
         // if file name is generated file name, save file as 'save as' else save
@@ -355,31 +377,85 @@ public void testing(){
     }// end checkFileName
 
     public void getFirstRecord(){
-        if (employeeDetailsView.checkInput() && !employeeDetailsView.checkForChanges()) {
+        if (employeeDetailsView.checkInput() && !checkForChanges()) {
             firstRecord();
             employeeDetailsView.displayRecords(currentEmployee);
         }
     }
 
     public void getPreviousRecord(){
-        if (employeeDetailsView.checkInput() && !employeeDetailsView.checkForChanges()) {
+        if (employeeDetailsView.checkInput() && !checkForChanges()) {
             previousRecord();
             employeeDetailsView.displayRecords(currentEmployee);
         }
     }
 
     public void getNextRecord(){
-        if (employeeDetailsView.checkInput() && !employeeDetailsView.checkForChanges()) {
+        if (employeeDetailsView.checkInput() && !checkForChanges()) {
             nextRecord();
             employeeDetailsView.displayRecords(currentEmployee);
         }
     }
 
     public void getLastRecord(){
-        if (employeeDetailsView.checkInput() && !employeeDetailsView.checkForChanges()) {
+        if (employeeDetailsView.checkInput() && !checkForChanges()) {
             lastRecord();
             employeeDetailsView.displayRecords(currentEmployee);
         }
     }
+
+    public void deleteRecord() {
+        if (isSomeoneToDisplay()) {// if any active record in file display
+            // message and delete record
+            int returnVal = JOptionPane.showOptionDialog(employeeDetailsView, "Do you want to delete record?", "Delete",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+            // if answer yes delete (make inactive - empty) record
+            if (returnVal == JOptionPane.YES_OPTION) {
+                // open file for writing
+                application.openWriteFile(file.getAbsolutePath());
+                // delete (make inactive - empty) record in file proper position
+                application.deleteRecords(currentByteStart);
+                application.closeWriteFile();// close file for writing
+                // if any active record in file display next record
+                if (isSomeoneToDisplay()) {
+                    nextRecord();// look for next record
+                    employeeDetailsView.displayRecords(currentEmployee);
+                } // end if
+            } // end if
+        } // end if
+    }// end deleteDecord
+
+    public void editDetails() {
+        // activate field for editing if there is records to display
+        if (isSomeoneToDisplay()) {
+            // remove euro sign from salary text field
+            employeeDetailsView.getSalaryField().setText(employeeDetailsView.getFieldFormat().format(currentEmployee.getSalary()));
+            change = false;
+            employeeDetailsView.setEnabled(true);// enable text fields for editing
+        } // end if
+    }// end editDetails
+
+    public boolean checkForChanges() {
+        boolean anyChanges = false;
+        // if changes where made, allow user to save there changes
+        if (change) {
+            saveChanges();// save changes
+            anyChanges = true;
+        } // end if
+        // if no changes made, set text fields as unenabled and display
+        // current Model.Employee
+        else {
+            employeeDetailsView.setEnabled(false);
+            employeeDetailsView.displayRecords(currentEmployee);
+        } // end else
+
+        return anyChanges;
+    }// end checkForChanges
+
+    public void saveEmployeeEdits(){
+        employeeDetailsView.checkInput();
+        checkForChanges();
+    }
+
 
 }

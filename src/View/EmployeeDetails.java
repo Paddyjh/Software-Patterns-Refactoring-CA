@@ -103,6 +103,14 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		return idField;
 	}
 
+	public JTextField getSalaryField() {
+		return salaryField;
+	}
+
+	public static DecimalFormat getFieldFormat() {
+		return fieldFormat;
+	}
+
 	// initialize menu bar
 	private JMenuBar menuBar() {
 		JMenuBar menuBar = new JMenuBar();
@@ -125,20 +133,20 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		fileMenu.add(open = new JMenuItem("Open")).addActionListener(e -> controller.openFile());
 		open.setMnemonic(KeyEvent.VK_O);
 		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-		fileMenu.add(save = new JMenuItem("Save")).addActionListener(e -> controller.saveFile());
+		fileMenu.add(save = new JMenuItem("Save")).addActionListener(e -> controller.saveFileController());
 		save.setMnemonic(KeyEvent.VK_S);
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-		fileMenu.add(saveAs = new JMenuItem("Save As")).addActionListener(e -> controller.saveFileAs());
+		fileMenu.add(saveAs = new JMenuItem("Save As")).addActionListener(e -> controller.saveFileAsController());
 		saveAs.setMnemonic(KeyEvent.VK_F2);
 		saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, ActionEvent.CTRL_MASK));
 
 		recordMenu.add(create = new JMenuItem("Create new Record")).addActionListener(this);
 		create.setMnemonic(KeyEvent.VK_N);
 		create.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_N, ActionEvent.CTRL_MASK));
-		recordMenu.add(modify = new JMenuItem("Modify Record")).addActionListener(this);
+		recordMenu.add(modify = new JMenuItem("Modify Record")).addActionListener(e -> controller.editDetails());
 		modify.setMnemonic(KeyEvent.VK_E);
 		modify.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, ActionEvent.CTRL_MASK));
-		recordMenu.add(delete = new JMenuItem("Delete Record")).addActionListener(this);
+		recordMenu.add(delete = new JMenuItem("Delete Record")).addActionListener(e -> controller.deleteRecord());
 
 		navigateMenu.add(firstItem = new JMenuItem("First"));
 		firstItem.addActionListener(e -> controller.getFirstRecord());
@@ -228,15 +236,15 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 		buttonPanel.add(add = new JButton("Add Record"), "growx, pushx");
 		add.addActionListener(e -> controller.testing()); //change this to proper call
-		add.setToolTipText("Add new Model.Employee Record");
+		add.setToolTipText("Add new Employee Record");
 		buttonPanel.add(edit = new JButton("Edit Record"), "growx, pushx");
-		edit.addActionListener(this);
-		edit.setToolTipText("Edit current Model.Employee");
+		edit.addActionListener(e -> controller.editDetails());
+		edit.setToolTipText("Edit current Employee");
 		buttonPanel.add(deleteButton = new JButton("Delete Record"), "growx, pushx, wrap");
 		deleteButton.addActionListener(this);
-		deleteButton.setToolTipText("Delete current Model.Employee");
+		deleteButton.setToolTipText("Delete current Employee");
 		buttonPanel.add(displayAll = new JButton("List all Records"), "growx, pushx");
-		displayAll.addActionListener(this);
+		displayAll.addActionListener(e -> controller.deleteRecord());
 		displayAll.setToolTipText("List all Registered Employees");
 
 		return buttonPanel;
@@ -276,7 +284,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		empDetails.add(fullTimeCombo = new JComboBox<String>(fullTime), "growx, pushx, wrap");
 
 		buttonPanel.add(saveChange = new JButton("Save"));
-		saveChange.addActionListener(this);
+		saveChange.addActionListener(e -> controller.saveEmployeeEdits());
 		saveChange.setVisible(false);
 		saveChange.setToolTipText("Save changes");
 		buttonPanel.add(cancelChange = new JButton("Cancel"));
@@ -355,7 +363,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 			else
 				fullTimeCombo.setSelectedIndex(2);
 		}
-		change = false;
+		controller.setChange(false);
 	}// end display records
 
 	// display Model.Employee summary dialog
@@ -639,15 +647,15 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	}// end getAllEmployees
 
 	// activate field for editing
-	private void editDetails() {
-		// activate field for editing if there is records to display
-		if (isSomeoneToDisplay()) {
-		// remove euro sign from salary text field
-		salaryField.setText(fieldFormat.format(currentEmployee.getSalary()));
-		change = false;
-		setEnabled(true);// enable text fields for editing
-		} // end if
-	}// end editDetails
+//	private void editDetails() {
+//		// activate field for editing if there is records to display
+//		if (controller.isSomeoneToDisplay()) {
+//		// remove euro sign from salary text field
+//		salaryField.setText(fieldFormat.format(currentEmployee.getSalary()));
+//		controller.setChangesMade(false);
+//		setEnabled(true);// enable text fields for editing
+//		} // end if
+//	}// end editDetails
 
 	// ignore changes and set text field unenabled
 	private void cancelChange() {
@@ -734,22 +742,22 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	}// end checkFileName
 
 	// check if any changes text field where made
-	public boolean checkForChanges() {
-		boolean anyChanges = false;
-		// if changes where made, allow user to save there changes
-		if (change) {
-			saveChanges();// save changes
-			anyChanges = true;
-		} // end if
-		// if no changes made, set text fields as unenabled and display
-		// current Model.Employee
-		else {
-			setEnabled(false);
-			displayRecords(currentEmployee);
-		} // end else
-
-		return anyChanges;
-	}// end checkForChanges
+//	public boolean checkForChanges() {
+//		boolean anyChanges = false;
+//		// if changes where made, allow user to save there changes
+//		if (change) {
+//			saveChanges();// save changes
+//			anyChanges = true;
+//		} // end if
+//		// if no changes made, set text fields as unenabled and display
+//		// current Model.Employee
+//		else {
+//			setEnabled(false);
+//			displayRecords(currentEmployee);
+//		} // end else
+//
+//		return anyChanges;
+//	}// end checkForChanges
 
 	// check for input in text fields
 	public boolean checkInput() {
@@ -760,7 +768,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 			ppsField.setBackground(new Color(255, 150, 150));
 			valid = false;
 		} // end if
-		if (ppsField.isEditable() && correctPps(ppsField.getText().trim(), currentByteStart)) {
+		if (ppsField.isEditable() && this.controller.correctPps(ppsField.getText().trim(), -2)) {
 			ppsField.setBackground(new Color(255, 150, 150));
 			valid = false;
 		} // end if
@@ -1040,7 +1048,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	public void actionPerformed(ActionEvent e) {
 
 		if (e.getSource() == closeApp) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && !controller.checkForChanges())
 				exitApp();
 		}
 //		else if (e.getSource() == open) {
@@ -1058,19 +1066,22 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 //		}
 
 		else if (e.getSource() == searchById) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && !controller.checkForChanges())
 				displaySearchByIdDialog();
 		} else if (e.getSource() == searchBySurname) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && !controller.checkForChanges())
 				displaySearchBySurnameDialog();
 		} else if (e.getSource() == searchId || e.getSource() == searchByIdField)
 			searchEmployeeById();
 		else if (e.getSource() == searchSurname || e.getSource() == searchBySurnameField)
 			searchEmployeeBySurname();
-		else if (e.getSource() == saveChange) {
-			if (checkInput() && !checkForChanges())
-				;
-		} else if (e.getSource() == cancelChange){
+
+//		else if (e.getSource() == saveChange) {
+//			if (checkInput() && !controller.checkForChanges())
+//				;
+//		}
+
+		else if (e.getSource() == cancelChange){
 			cancelChange();
 //		else if (e.getSource() == firstItem || e.getSource() == first) {
 //			if (checkInput() && !checkForChanges()) {
@@ -1093,20 +1104,24 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 //				displayRecords(currentEmployee);
 //			}
 		} else if (e.getSource() == listAll || e.getSource() == displayAll) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && !controller.checkForChanges())
 				if (isSomeoneToDisplay())
 					displayEmployeeSummaryDialog();
 		} else if (e.getSource() == create || e.getSource() == add) {
-			if (checkInput() && !checkForChanges())
+			if (checkInput() && !controller.checkForChanges())
 				new AddRecordDialog(EmployeeDetails.this, this.controller);
-		} else if (e.getSource() == modify || e.getSource() == edit) {
-			if (checkInput() && !checkForChanges())
-				editDetails();
-		} else if (e.getSource() == delete || e.getSource() == deleteButton) {
-			if (checkInput() && !checkForChanges())
-				deleteRecord();
-		} else if (e.getSource() == searchBySurname) {
-			if (checkInput() && !checkForChanges())
+		}
+
+//		else if (e.getSource() == modify || e.getSource() == edit) {
+//			if (checkInput() && !checkForChanges())
+//				editDetails();
+//		}
+//		else if (e.getSource() == delete || e.getSource() == deleteButton) {
+//			if (checkInput() && !checkForChanges())
+//				deleteRecord();
+//		}
+		else if (e.getSource() == searchBySurname) {
+			if (checkInput() && !controller.checkForChanges())
 				new SearchBySurnameDialog(EmployeeDetails.this);
 		}
 	}// end actionPerformed
@@ -1153,23 +1168,23 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 	// DocumentListener methods
 	public void changedUpdate(DocumentEvent d) {
-		change = true;
+		controller.setChange(true);
 		new JTextFieldLimit(20);
 	}
 
 	public void insertUpdate(DocumentEvent d) {
-		change = true;
+		controller.setChange(true);
 		new JTextFieldLimit(20);
 	}
 
 	public void removeUpdate(DocumentEvent d) {
-		change = true;
+		controller.setChange(true);
 		new JTextFieldLimit(20);
 	}
 
 	// ItemListener method
 	public void itemStateChanged(ItemEvent e) {
-		change = true;
+		controller.setChange(true);
 	}
 
 	// WindowsListener methods
