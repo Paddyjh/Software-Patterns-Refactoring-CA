@@ -253,7 +253,7 @@ public void testing(){
         } // end if
     }// end openFile
 
-    private void saveFile() {
+    public void saveFile() {
         // if file name is generated file name, save file as 'save as' else save
         // changes to file
         if (file.getName().equals(generatedFileName))
@@ -305,7 +305,7 @@ public void testing(){
 
     // save file as 'save as'
     //Potentially move elsewhere or adapt
-    private void saveFileAs() {
+    public void saveFileAs() {
         final JFileChooser fc = new JFileChooser();
         File newFile;
         String defaultFileName = "new_Employee.dat";

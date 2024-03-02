@@ -125,10 +125,10 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		fileMenu.add(open = new JMenuItem("Open")).addActionListener(e -> controller.openFile());
 		open.setMnemonic(KeyEvent.VK_O);
 		open.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, ActionEvent.CTRL_MASK));
-		fileMenu.add(save = new JMenuItem("Save")).addActionListener(this);
+		fileMenu.add(save = new JMenuItem("Save")).addActionListener(e -> controller.saveFile());
 		save.setMnemonic(KeyEvent.VK_S);
 		save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, ActionEvent.CTRL_MASK));
-		fileMenu.add(saveAs = new JMenuItem("Save As")).addActionListener(this);
+		fileMenu.add(saveAs = new JMenuItem("Save As")).addActionListener(e -> controller.saveFileAs());
 		saveAs.setMnemonic(KeyEvent.VK_F2);
 		saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, ActionEvent.CTRL_MASK));
 
@@ -1047,15 +1047,17 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 //			if (checkInput() && !checkForChanges())
 //				openFile();
 //		}
-		else if (e.getSource() == save) {
-			if (checkInput() && !checkForChanges())
-				saveFile();
-			change = false;
-		} else if (e.getSource() == saveAs) {
-			if (checkInput() && !checkForChanges())
-				saveFileAs();
-			change = false;
-		} else if (e.getSource() == searchById) {
+//		else if (e.getSource() == save) {
+//			if (checkInput() && !checkForChanges())
+//				saveFile();
+//			change = false;
+//		} else if (e.getSource() == saveAs) {
+//			if (checkInput() && !checkForChanges())
+//				saveFileAs();
+//			change = false;
+//		}
+
+		else if (e.getSource() == searchById) {
 			if (checkInput() && !checkForChanges())
 				displaySearchByIdDialog();
 		} else if (e.getSource() == searchBySurname) {
