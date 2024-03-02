@@ -107,14 +107,18 @@ public class Employee{
 
 	// Display Model.Employee details
 	public String toString() {
-		String bool = "";
-		if (fullTime)
-			bool = "Yes";
-		else
-			bool = "No";
+		StringBuilder sb = new StringBuilder();
+		String bool = fullTime ? "Yes" : "No";
 
-		return "Model.Employee ID: " + this.employeeId + "\nPPS Number: " + this.pps + "\nSurname: " + this.surname
-				+ "\nFirst Name: " + this.firstName + "\nGender: " + this.gender + "\nDepartment: " + this.department + "\nSalary: " + this.salary
-				+ "\nFull Time: " + bool;
+		sb.append("Employee ID: ").append(this.employeeId)
+				.append("\nPPS Number: ").append(this.pps)
+				.append("\nSurname: ").append(this.surname)
+				.append("\nFirst Name: ").append(this.firstName)
+				.append("\nGender: ").append(this.gender)
+				.append("\nDepartment: ").append(this.department)
+				.append("\nSalary: ").append(this.salary)
+				.append("\nFull Time: ").append(bool);
+
+		return sb.toString();
 	}// end toString
 }// end class Model.Employee
