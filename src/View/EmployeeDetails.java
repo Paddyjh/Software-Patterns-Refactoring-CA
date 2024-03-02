@@ -61,14 +61,14 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 	private JComboBox<String> genderCombo, departmentCombo, fullTimeCombo;
 	private JTextField idField;
 	private JTextField ppsField;
-	public JTextField surnameField;
+	private JTextField surnameField;
 	private JTextField firstNameField;
 	private JTextField salaryField;
 //	private static EmployeeDetails frame = new EmployeeDetails();
 	// font for labels, text fields and combo boxes
 	Font font1 = new Font("SansSerif", Font.BOLD, 16);
-	public JTextField searchByIdField;
-	public JTextField searchBySurnameField;
+	private JTextField searchByIdField;
+	private JTextField searchBySurnameField;
 	// gender combo box values
 	String[] gender = {"", "M", "F"};
 	// department combo box values
@@ -90,6 +90,18 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 
 	public static DecimalFormat getFieldFormat() {
 		return fieldFormat;
+	}
+
+	public JTextField getSearchByIdField(){
+		return this.searchByIdField;
+	}
+
+	public JTextField getSearchBySurnameField(){
+		return this.searchBySurnameField;
+	}
+
+	public JTextField getSurnameField(){
+		return this.surnameField;
 	}
 
 	// initialize menu bar

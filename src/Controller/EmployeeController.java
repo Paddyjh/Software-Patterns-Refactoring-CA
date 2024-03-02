@@ -469,7 +469,7 @@ public class EmployeeController {
     }
 
     public void searchEmployeeBySurnameController(SearchBySurnameDialog view) {
-        this.employeeDetailsView.searchBySurnameField.setText(view.searchField.getText());
+        this.employeeDetailsView.getSearchBySurnameField().setText(view.searchField.getText());
         searchEmployeeBySurname();
         view.dispose();
     }
@@ -477,7 +477,7 @@ public class EmployeeController {
     public void searchEmployeeByIdController(SearchByIdDialog view) {
         try {
             Double.parseDouble(view.searchField.getText());
-            employeeDetailsView.searchByIdField.setText(view.searchField.getText());
+            employeeDetailsView.getSearchByIdField().setText(view.searchField.getText());
             searchEmployeeById();
             view.dispose();
         } catch (NumberFormatException num) {
@@ -495,9 +495,9 @@ public class EmployeeController {
             String firstSurname = currentEmployee.getSurname().trim();
             // if ID to search is already displayed do nothing else loop through
             // records
-            if (employeeDetailsView.searchBySurnameField.getText().trim().equalsIgnoreCase(employeeDetailsView.surnameField.getText().trim()))
+            if (employeeDetailsView.getSearchBySurnameField().getText().trim().equalsIgnoreCase(employeeDetailsView.getSurnameField().getText().trim()))
                 found = true;
-            else if (employeeDetailsView.searchBySurnameField.getText().trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
+            else if (employeeDetailsView.getSearchBySurnameField().getText().trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
                 found = true;
                 employeeDetailsView.displayRecords(currentEmployee);
             } // end else if
@@ -508,7 +508,7 @@ public class EmployeeController {
                 while (!firstSurname.trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
                     // if found break from loop and display Model.Employee details
                     // else look for next record
-                    if (employeeDetailsView.searchBySurnameField.getText().trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
+                    if (employeeDetailsView.getSearchBySurnameField().getText().trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
                         found = true;
                         employeeDetailsView.displayRecords(currentEmployee);
                         break;
@@ -521,7 +521,7 @@ public class EmployeeController {
             if (!found)
                 JOptionPane.showMessageDialog(null, "Employee not found!");
         } // end if
-        employeeDetailsView.searchBySurnameField.setText("");
+        employeeDetailsView.getSearchBySurnameField().setText("");
     }// end searchEmployeeBySurname
 
     public void searchEmployeeById() {
@@ -534,9 +534,9 @@ public class EmployeeController {
                 int firstId = currentEmployee.getEmployeeId();
                 // if ID to search is already displayed do nothing else loop
                 // through records
-                if (employeeDetailsView.searchByIdField.getText().trim().equals(employeeDetailsView.getIdField().getText().trim()))
+                if (employeeDetailsView.getSearchByIdField().getText().trim().equals(employeeDetailsView.getIdField().getText().trim()))
                     found = true;
-                else if (employeeDetailsView.searchByIdField.getText().trim().equals(Integer.toString(currentEmployee.getEmployeeId()))) {
+                else if (employeeDetailsView.getSearchByIdField().getText().trim().equals(Integer.toString(currentEmployee.getEmployeeId()))) {
                     found = true;
                     employeeDetailsView.displayRecords(currentEmployee);
                 } // end else if
@@ -547,7 +547,7 @@ public class EmployeeController {
                     while (firstId != currentEmployee.getEmployeeId()) {
                         // if found break from loop and display Model.Employee details
                         // else look for next record
-                        if (Integer.parseInt(employeeDetailsView.searchByIdField.getText().trim()) == currentEmployee.getEmployeeId()) {
+                        if (Integer.parseInt(employeeDetailsView.getSearchByIdField().getText().trim()) == currentEmployee.getEmployeeId()) {
                             found = true;
                             employeeDetailsView.displayRecords(currentEmployee);
                             break;
@@ -561,11 +561,11 @@ public class EmployeeController {
             } // end if
         } // end try
         catch (NumberFormatException e) {
-            employeeDetailsView.searchByIdField.setBackground(new Color(255, 150, 150));
+            employeeDetailsView.getSearchByIdField().setBackground(new Color(255, 150, 150));
             JOptionPane.showMessageDialog(null, "Wrong ID format!");
         } // end catch
-        employeeDetailsView.searchByIdField.setBackground(Color.WHITE);
-        employeeDetailsView.searchByIdField.setText("");
+        employeeDetailsView.getSearchByIdField().setBackground(Color.WHITE);
+        employeeDetailsView.getSearchByIdField().setText("");
     }// end searchEmployeeByID
 
     // create vector of vectors with all Model.Employee details
