@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
-public class SearchBySurnameDialog extends JDialog implements ActionListener{
+public class SearchBySurnameDialog extends JDialog {
 	EmployeeDetails parent;
 	EmployeeController controller;
 	JButton search, cancel;
@@ -65,7 +65,7 @@ public class SearchBySurnameDialog extends JDialog implements ActionListener{
 		search.requestFocus();
 		
 		buttonPanel.add(cancel = new JButton("Cancel"));
-		cancel.addActionListener(this);
+		cancel.addActionListener(e -> dispose());
 		
 		searchPanel.add(textPanel);
 		searchPanel.add(buttonPanel);
@@ -73,19 +73,4 @@ public class SearchBySurnameDialog extends JDialog implements ActionListener{
 		return searchPanel;
 	}// end searchPane
 
-	// action listener for save and cancel button
-	public void actionPerformed(ActionEvent e) {
-		// if option search, search for Model.Employee
-//		if(e.getSource() == search){
-//			this.parent.searchBySurnameField.setText(searchField.getText());
-//			// search Model.Employee by surname
-//			this.parent.searchEmployeeBySurname();
-//			dispose();// dispose dialog
-//		}// end if
-//		// else dispose dialog
-//		else
-
-		if(e.getSource() == cancel)
-			dispose();// dispose dialog
-	}// end actionPerformed
 }// end class View.SearchBySurnameDialog

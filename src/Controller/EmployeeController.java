@@ -15,9 +15,10 @@ import java.util.Random;
 import java.util.Vector;
 
 public class EmployeeController {
-
+    // hold object start position in file
     private long currentByteStart = 0;
     private RandomFile application = new RandomFile();
+    // hold file name and path for current file in use
     private File file;
     private boolean change = false;
     // holds true or false if any changes are made for file content
@@ -39,7 +40,7 @@ public class EmployeeController {
         this.change = change;
     }
 
-
+    // create file with generated file name when application is opened
     private void createRandomFile() {
         generatedFileName = getFileName() + ".dat";
         // assign generated file name to file
@@ -48,6 +49,7 @@ public class EmployeeController {
         application.createFile(file.getName());
     }// end createRandomFile
 
+    // generate 20 character long file name
     private String getFileName() {
         String fileNameChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_-";
         StringBuilder fileName = new StringBuilder();
@@ -61,7 +63,6 @@ public class EmployeeController {
         return generatedfileName;
     }// end getFileName
 
-    //don't forget about updating changes made
     public void saveEmployeeRecord(AddRecordDialog view) {
         // Validate inputs from the view
         if (view.checkInput()) {
@@ -76,6 +77,7 @@ public class EmployeeController {
 
     }
 
+    //Add Employee record to File
     public void addEmployeeRecord(AddRecordDialog view) {
         Employee theEmployee = view.returnEmployee();
         this.currentEmployee = theEmployee;
@@ -90,6 +92,12 @@ public class EmployeeController {
 
     }
 
+    public void addRecordController(){
+        if (employeeDetailsView.checkInput() && !checkForChanges())
+            new AddRecordDialog(employeeDetailsView, this);
+    }
+
+    // get next free ID from Employees in the file
     public int getNextFreeId() {
         int nextFreeId = 0;
         // if file is empty or all records are empty start with ID 1 else look
@@ -104,6 +112,7 @@ public class EmployeeController {
         return nextFreeId;
     }// end getNextFreeId
 
+    // find byte start in file for first active record
     private void firstRecord() {
         // if any active record in file look for first record
         if (isSomeoneToDisplay()) {
@@ -121,7 +130,6 @@ public class EmployeeController {
     }// end firstRecord
 
     // find byte start in file for previous active record
-    //Potentially move elsewhere or adapt
     private void previousRecord() {
         // if any active record in file look for first record
         if (isSomeoneToDisplay()) {
@@ -143,7 +151,6 @@ public class EmployeeController {
     }// end previousRecord
 
     // find byte start in file for next active record
-    //Potentially move elsewhere or adapt
     private void nextRecord() {
         // if any active record in file look for first record
         if (isSomeoneToDisplay()) {
@@ -165,7 +172,6 @@ public class EmployeeController {
     }// end nextRecord
 
     // find byte start in file for last active record
-    //Potentially move elsewhere or adapt
     private void lastRecord() {
         // if any active record in file look for first record
         if (isSomeoneToDisplay()) {
@@ -182,6 +188,7 @@ public class EmployeeController {
         } // end if
     }// end lastRecord
 
+    // check if any of records in file is active - ID is not 0
     public boolean isSomeoneToDisplay() {
         boolean someoneToDisplay = false;
         // open file for reading
@@ -198,6 +205,7 @@ public class EmployeeController {
         return someoneToDisplay;
     }// end isSomeoneToDisplay
 
+    // check for correct PPS format and look if PPS already in use
     public boolean correctPps(String pps, long currentByte) {
         System.out.println("Current Byte : " + currentByte);
         System.out.println("Current Byte Start : " + currentByteStart);
@@ -229,10 +237,7 @@ public class EmployeeController {
         return ppsExist;
     }// end correctPPS
 
-public void testing(){
-        System.out.println("This is a test");
-}
-
+    // open file
     public void openFile() {
         final JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Open");
@@ -308,6 +313,7 @@ public void testing(){
         } // end else
     }// end saveFile
 
+    // save changes to current Employee
     private void saveChanges() {
         int returnVal = JOptionPane.showOptionDialog(employeeDetailsView, "Do you want to save changes to current Model.Employee?", "Save",
                 JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
@@ -366,6 +372,7 @@ public void testing(){
         changesMade = false;
     }// end saveFileAs
 
+    // check if file name has extension .dat
     private boolean checkFileName(File fileName) {
         boolean checkFile = false;
         int length = fileName.toString().length();
@@ -405,6 +412,7 @@ public void testing(){
         }
     }
 
+    // delete (make inactive - empty) record from file
     public void deleteRecord() {
         if (isSomeoneToDisplay()) {// if any active record in file display
             // message and delete record
@@ -426,6 +434,7 @@ public void testing(){
         } // end if
     }// end deleteDecord
 
+    // activate field for editing
     public void editDetails() {
         // activate field for editing if there is records to display
         if (isSomeoneToDisplay()) {
@@ -436,6 +445,7 @@ public void testing(){
         } // end if
     }// end editDetails
 
+    // check if any changes text field where made
     public boolean checkForChanges() {
         boolean anyChanges = false;
         // if changes where made, allow user to save there changes
@@ -547,7 +557,7 @@ public void testing(){
                 } // end else
                 // if Model.Employee not found display message
                 if (!found)
-                    JOptionPane.showMessageDialog(null, "Model.Employee not found!");
+                    JOptionPane.showMessageDialog(null, "Employee not found!");
             } // end if
         } // end try
         catch (NumberFormatException e) {
@@ -558,6 +568,7 @@ public void testing(){
         employeeDetailsView.searchByIdField.setText("");
     }// end searchEmployeeByID
 
+    // create vector of vectors with all Model.Employee details
     private Vector<Object> getAllEmloyees() {
         // vector of Model.Employee objects
         Vector<Object> allEmployee = new Vector<Object>();
@@ -597,6 +608,7 @@ public void testing(){
             exitApp();
     }
 
+    // allow to save changes to file when exiting the application
     public void exitApp() {
         // if file is not empty allow to save changes
         if (file.length() != 0) {
@@ -634,6 +646,21 @@ public void testing(){
         } // end else
     }// end exitApp
 
+    // ignore changes and set text field unenabled
+    public void cancelChange(){
+        employeeDetailsView.setEnabled(false);
+        employeeDetailsView.displayRecords(currentEmployee);
+    }
+
+    public void searchByIdController(){
+        if (employeeDetailsView.checkInput() && !checkForChanges())
+            employeeDetailsView.displaySearchByIdDialog();
+    }
+
+    public void searchBySurnameController(){
+        if (employeeDetailsView.checkInput() && !checkForChanges())
+            employeeDetailsView.displaySearchBySurnameDialog();
+    }
 
 
 }

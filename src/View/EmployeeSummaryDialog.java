@@ -26,7 +26,7 @@ import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
 
-public class EmployeeSummaryDialog extends JDialog implements ActionListener {
+public class EmployeeSummaryDialog extends JDialog {
 	// vector with all Employees details
 	Vector<Object> allEmployees;
 	JButton back;
@@ -102,7 +102,7 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		JScrollPane scrollPane = new JScrollPane(employeeTable);
 
 		buttonPanel.add(back = new JButton("Back"));
-		back.addActionListener(this);
+		back.addActionListener(e -> dispose());
 		back.setToolTipText("Return to main screen");
 		
 		summaryDialog.add(buttonPanel,"growx, pushx, wrap");
@@ -112,12 +112,6 @@ public class EmployeeSummaryDialog extends JDialog implements ActionListener {
 		return summaryDialog;
 	}// end summaryPane
 
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == back){
-			dispose();
-		}
-
-	}
 	// format for salary column
 	static class DecimalFormatRenderer extends DefaultTableCellRenderer {
 		 private static final DecimalFormat format = new DecimalFormat(

@@ -24,7 +24,7 @@ import Controller.EmployeeController;
 import Model.Employee;
 import net.miginfocom.swing.MigLayout;
 
-public class AddRecordDialog extends JDialog implements ActionListener {
+public class AddRecordDialog extends JDialog {
 	//Controller to handle business logic and data handling
 	EmployeeController controller;
 
@@ -88,10 +88,10 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), "growx, pushx, wrap");
 
 		buttonPanel.add(save = new JButton("Save"));
-		save.addActionListener(this);
+		save.addActionListener(e -> controller.saveEmployeeRecord(this));
 		save.requestFocus();
 		buttonPanel.add(cancel = new JButton("Cancel"));
-		cancel.addActionListener(this);
+		cancel.addActionListener(e -> dispose());
 
 		empDetails.add(buttonPanel, "span 2,growx, pushx,wrap");
 		// loop through all panel components and add fonts and listeners
@@ -108,26 +108,9 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 					field.setDocument(new JTextFieldLimit(20));
 			}// end else if
 		}// end for
-//		idField.setText(Integer.toString(this.parent.getNextFreeId()));
 		idField.setText(Integer.toString(controller.getNextFreeId()));
 		return empDetails;
 	}
-
-	// add record to file
-//	public void addRecord() {
-//		boolean fullTime = false;
-//		Employee theEmployee;
-//
-//		if (((String) fullTimeCombo.getSelectedItem()).equalsIgnoreCase("Yes"))
-//			fullTime = true;
-//		// create new Employee record with details from text fields
-//		theEmployee = new Employee(Integer.parseInt(idField.getText()), ppsField.getText().toUpperCase(), surnameField.getText().toUpperCase(),
-//				firstNameField.getText().toUpperCase(), genderCombo.getSelectedItem().toString().charAt(0),
-//				departmentCombo.getSelectedItem().toString(), Double.parseDouble(salaryField.getText()), fullTime);
-//		this.parent.currentEmployee = theEmployee;
-//		this.parent.addRecord(theEmployee);
-//		this.parent.displayRecords(theEmployee);
-//	}
 
 	public Employee returnEmployee() {
 		boolean fullTime = false;
@@ -199,33 +182,5 @@ public class AddRecordDialog extends JDialog implements ActionListener {
 		departmentCombo.setBackground(Color.WHITE);
 		fullTimeCombo.setBackground(Color.WHITE);
 	}// end setToWhite
-
-	// action performed
-//	public void actionPerformed(ActionEvent e) {
-//		// if chosen option save, save record to file
-//		if (e.getSource() == save) {
-//			// if inputs correct, save record
-//			if (checkInput()) {
-//				addRecord();// add record to file
-//				dispose();// dispose dialog
-//				this.parent.changesMade = true;
-//			}// end if
-//			// else display message and set text fields to white colour
-//			else {
-//				JOptionPane.showMessageDialog(null, "Wrong values or format! Please check!");
-//				setToWhite();
-//			}// end else
-//		}// end if
-//		else if (e.getSource() == cancel)
-//			dispose();// dispose dialog
-//	}// end actionPerformed
-//}// end class View.AddRecordDialog
-
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == save) {
-			controller.saveEmployeeRecord(this); // Assume this method exists in the controller
-		} else if (e.getSource() == cancel) {
-			dispose();
-		}
-	}
+	
 }
