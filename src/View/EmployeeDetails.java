@@ -166,7 +166,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		navigateMenu.add(searchBySurname = new JMenuItem("Search by Surname")).addActionListener(this);
 		navigateMenu.add(listAll = new JMenuItem("List all Records")).addActionListener(e -> controller.displayEmployeeSummaryDialog());
 
-		closeMenu.add(closeApp = new JMenuItem("Close")).addActionListener(this);
+		closeMenu.add(closeApp = new JMenuItem("Close")).addActionListener(e -> controller.closeApp());
 		closeApp.setMnemonic(KeyEvent.VK_F4);
 		closeApp.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.CTRL_MASK));
 
@@ -1052,10 +1052,10 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	//Potentially move elsewhere or adapt
 	public void actionPerformed(ActionEvent e) {
 
-		if (e.getSource() == closeApp) {
-			if (checkInput() && !controller.checkForChanges())
-				exitApp();
-		}
+//		if (e.getSource() == closeApp) {
+//			if (checkInput() && !controller.checkForChanges())
+//				exitApp();
+//		}
 //		else if (e.getSource() == open) {
 //			if (checkInput() && !checkForChanges())
 //				openFile();
@@ -1070,7 +1070,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 //			change = false;
 //		}
 
-		else if (e.getSource() == searchById) {
+		if (e.getSource() == searchById) {
 			if (checkInput() && !controller.checkForChanges())
 				displaySearchByIdDialog();
 		} else if (e.getSource() == searchBySurname) {
@@ -1202,7 +1202,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	// WindowsListener methods
 	public void windowClosing(WindowEvent e) {
 		// exit application
-		exitApp();
+		controller.exitApp();
 	}
 
 	public void windowActivated(WindowEvent e) {

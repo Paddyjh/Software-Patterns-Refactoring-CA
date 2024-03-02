@@ -592,6 +592,48 @@ public void testing(){
             new EmployeeSummaryDialog(getAllEmloyees());
     }
 
+    public void closeApp(){
+        if (employeeDetailsView.checkInput() && !checkForChanges())
+            exitApp();
+    }
+
+    public void exitApp() {
+        // if file is not empty allow to save changes
+        if (file.length() != 0) {
+            if (changesMade) {
+                int returnVal = JOptionPane.showOptionDialog(employeeDetailsView, "Do you want to save changes?", "Save",
+                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, null, null);
+                // if user chooses to save file, save file
+                if (returnVal == JOptionPane.YES_OPTION) {
+                    saveFile();// save file
+                    // delete generated file if user saved details to other file
+                    if (file.getName().equals(generatedFileName))
+                        file.delete();// delete file
+                    System.exit(0);// exit application
+                } // end if
+                // else exit application
+                else if (returnVal == JOptionPane.NO_OPTION) {
+                    // delete generated file if user chooses not to save file
+                    if (file.getName().equals(generatedFileName))
+                        file.delete();// delete file
+                    System.exit(0);// exit application
+                } // end else if
+            } // end if
+            else {
+                // delete generated file if user chooses not to save file
+                if (file.getName().equals(generatedFileName))
+                    file.delete();// delete file
+                System.exit(0);// exit application
+            } // end else
+            // else exit application
+        } else {
+            // delete generated file if user chooses not to save file
+            if (file.getName().equals(generatedFileName))
+                file.delete();// delete file
+            System.exit(0);// exit application
+        } // end else
+    }// end exitApp
+
 
 
 }
