@@ -4,6 +4,8 @@ package View;/*
  * 
  * */
 
+import Controller.EmployeeController;
+
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.GridLayout;
@@ -23,13 +25,15 @@ import javax.swing.border.EtchedBorder;
 
 public class SearchByIdDialog extends JDialog implements ActionListener {
 	EmployeeDetails parent;
+	EmployeeController controller;
 	JButton search, cancel;
-	JTextField searchField;
+	public JTextField searchField;
 	// constructor for View.SearchByIdDialog
-	public SearchByIdDialog(EmployeeDetails parent) {
+	public SearchByIdDialog(EmployeeDetails parent, EmployeeController controller) {
 		setTitle("Search by Surname");
 		setModal(true);
 		this.parent = parent;
+		this.controller = controller;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 		JScrollPane scrollPane = new JScrollPane(searchPane());
@@ -59,7 +63,7 @@ public class SearchByIdDialog extends JDialog implements ActionListener {
 		searchField.setDocument(new JTextFieldLimit(20));
 		
 		buttonPanel.add(search = new JButton("Search"));
-		search.addActionListener(this);
+		search.addActionListener(e -> controller.searchEmployeeByIdController(this));
 		search.requestFocus();
 		
 		buttonPanel.add(cancel = new JButton("Cancel"));
@@ -74,23 +78,24 @@ public class SearchByIdDialog extends JDialog implements ActionListener {
 	// action listener for save and cancel button
 	public void actionPerformed(ActionEvent e) {
 		// if option search, search for Model.Employee
-		if (e.getSource() == search) {
-			// try get correct valus from text field
-			try {
-				Double.parseDouble(searchField.getText());
-				this.parent.searchByIdField.setText(searchField.getText());
-				// search Model.Employee by ID
-				this.parent.searchEmployeeById();
-				dispose();// dispose dialog
-			}// end try
-			catch (NumberFormatException num) {
-				// display message and set colour to text field if entry is wrong
-				searchField.setBackground(new Color(255, 150, 150));
-				JOptionPane.showMessageDialog(null, "Wrong ID format!");
-			}// end catch
-		}// end if
+//		if (e.getSource() == search) {
+//			// try get correct valus from text field
+//			try {
+//				Double.parseDouble(searchField.getText());
+//				this.parent.searchByIdField.setText(searchField.getText());
+//				// search Model.Employee by ID
+//				this.parent.searchEmployeeById();
+//				dispose();// dispose dialog
+//			}// end try
+//			catch (NumberFormatException num) {
+//				// display message and set colour to text field if entry is wrong
+//				searchField.setBackground(new Color(255, 150, 150));
+//				JOptionPane.showMessageDialog(null, "Wrong ID format!");
+//			}// end catch
+//		}// end if
 		// else dispose dialog
-		else if (e.getSource() == cancel)
+//		else
+			if (e.getSource() == cancel)
 			dispose();
 	}// end actionPerformed
 }// end class searchByIdDialog

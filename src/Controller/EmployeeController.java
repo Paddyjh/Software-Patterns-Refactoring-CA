@@ -4,9 +4,12 @@ import Model.Employee;
 import Model.RandomFile;
 import View.AddRecordDialog;
 import View.EmployeeDetails;
+import View.SearchByIdDialog;
+import View.SearchBySurnameDialog;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,7 +28,7 @@ public class EmployeeController {
     // holds current Model.Employee object
     Employee currentEmployee;
 
-    private EmployeeDetails employeeDetailsView;
+    EmployeeDetails employeeDetailsView;
     // display files in File Chooser only with extension .dat
     private FileNameExtensionFilter datfilter = new FileNameExtensionFilter("dat files (*.dat)", "dat");
 
@@ -181,7 +184,7 @@ public class EmployeeController {
         } // end if
     }// end lastRecord
 
-    private boolean isSomeoneToDisplay() {
+    public boolean isSomeoneToDisplay() {
         boolean someoneToDisplay = false;
         // open file for reading
         application.openReadFile(file.getAbsolutePath());
@@ -456,6 +459,107 @@ public void testing(){
         employeeDetailsView.checkInput();
         checkForChanges();
     }
+
+    public void searchEmployeeBySurnameController(SearchBySurnameDialog view) {
+        this.employeeDetailsView.searchBySurnameField.setText(view.searchField.getText());
+        searchEmployeeBySurname();
+        view.dispose();
+    }
+
+    public void searchEmployeeByIdController(SearchByIdDialog view) {
+        try {
+            Double.parseDouble(view.searchField.getText());
+            employeeDetailsView.searchByIdField.setText(view.searchField.getText());
+            searchEmployeeById();
+            view.dispose();
+        } catch (NumberFormatException num) {
+                // display message and set colour to text field if entry is wrong
+                view.searchField.setBackground(new Color(255, 150, 150));
+                JOptionPane.showMessageDialog(null, "Wrong ID format!");
+            }
+    }
+
+    public void searchEmployeeBySurname() {
+        boolean found = false;
+        // if any active Model.Employee record search for ID else do nothing
+        if (isSomeoneToDisplay()) {
+            firstRecord();// look for first record
+            String firstSurname = currentEmployee.getSurname().trim();
+            // if ID to search is already displayed do nothing else loop through
+            // records
+            if (employeeDetailsView.searchBySurnameField.getText().trim().equalsIgnoreCase(employeeDetailsView.surnameField.getText().trim()))
+                found = true;
+            else if (employeeDetailsView.searchBySurnameField.getText().trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
+                found = true;
+                employeeDetailsView.displayRecords(currentEmployee);
+            } // end else if
+            else {
+                nextRecord();// look for next record
+                // loop until Model.Employee found or until all Employees have been
+                // checked
+                while (!firstSurname.trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
+                    // if found break from loop and display Model.Employee details
+                    // else look for next record
+                    if (employeeDetailsView.searchBySurnameField.getText().trim().equalsIgnoreCase(currentEmployee.getSurname().trim())) {
+                        found = true;
+                        employeeDetailsView.displayRecords(currentEmployee);
+                        break;
+                    } // end if
+                    else
+                        nextRecord();// look for next record
+                } // end while
+            } // end else
+            // if Model.Employee not found display message
+            if (!found)
+                JOptionPane.showMessageDialog(null, "Employee not found!");
+        } // end if
+        employeeDetailsView.searchBySurnameField.setText("");
+    }// end searchEmployeeBySurname
+
+    public void searchEmployeeById() {
+        boolean found = false;
+
+        try {// try to read correct correct from input
+            // if any active Model.Employee record search for ID else do nothing
+            if (isSomeoneToDisplay()) {
+                firstRecord();// look for first record
+                int firstId = currentEmployee.getEmployeeId();
+                // if ID to search is already displayed do nothing else loop
+                // through records
+                if (employeeDetailsView.searchByIdField.getText().trim().equals(employeeDetailsView.getIdField().getText().trim()))
+                    found = true;
+                else if (employeeDetailsView.searchByIdField.getText().trim().equals(Integer.toString(currentEmployee.getEmployeeId()))) {
+                    found = true;
+                    employeeDetailsView.displayRecords(currentEmployee);
+                } // end else if
+                else {
+                    nextRecord();// look for next record
+                    // loop until Model.Employee found or until all Employees have
+                    // been checked
+                    while (firstId != currentEmployee.getEmployeeId()) {
+                        // if found break from loop and display Model.Employee details
+                        // else look for next record
+                        if (Integer.parseInt(employeeDetailsView.searchByIdField.getText().trim()) == currentEmployee.getEmployeeId()) {
+                            found = true;
+                            employeeDetailsView.displayRecords(currentEmployee);
+                            break;
+                        } else
+                            nextRecord();// look for next record
+                    } // end while
+                } // end else
+                // if Model.Employee not found display message
+                if (!found)
+                    JOptionPane.showMessageDialog(null, "Model.Employee not found!");
+            } // end if
+        } // end try
+        catch (NumberFormatException e) {
+            employeeDetailsView.searchByIdField.setBackground(new Color(255, 150, 150));
+            JOptionPane.showMessageDialog(null, "Wrong ID format!");
+        } // end catch
+        employeeDetailsView.searchByIdField.setBackground(Color.WHITE);
+        employeeDetailsView.searchByIdField.setText("");
+    }// end searchEmployeeByID
+
 
 
 }

@@ -79,7 +79,11 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	private JButton first, previous, next, last, add, edit, deleteButton, displayAll, searchId, searchSurname,
 			saveChange, cancelChange;
 	private JComboBox<String> genderCombo, departmentCombo, fullTimeCombo;
-	private JTextField idField, ppsField, surnameField, firstNameField, salaryField;
+	private JTextField idField;
+	private JTextField ppsField;
+	public JTextField surnameField;
+	private JTextField firstNameField;
+	private JTextField salaryField;
 //	private static EmployeeDetails frame = new EmployeeDetails();
 	// font for labels, text fields and combo boxes
 	Font font1 = new Font("SansSerif", Font.BOLD, 16);
@@ -87,7 +91,8 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 	String generatedFileName;
 	// holds current Model.Employee object
 	Employee currentEmployee;
-	JTextField searchByIdField, searchBySurnameField;
+	public JTextField searchByIdField;
+	public JTextField searchBySurnameField;
 	// gender combo box values
 	String[] gender = {"", "M", "F"};
 	// department combo box values
@@ -180,20 +185,20 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 		searchPanel.add(new JLabel("Search by ID:"), "growx, pushx");
 		searchPanel.add(searchByIdField = new JTextField(20), "width 200:200:200, growx, pushx");
-		searchByIdField.addActionListener(this);
+		searchByIdField.addActionListener(e -> controller.searchEmployeeById());
 		searchByIdField.setDocument(new JTextFieldLimit(20));
 		searchPanel.add(searchId = new JButton("Go"),
 				"width 35:35:35, height 20:20:20, growx, pushx, wrap");
-		searchId.addActionListener(this);
+		searchId.addActionListener(e -> controller.searchEmployeeById());
 		searchId.setToolTipText("Search Model.Employee By ID");
 
 		searchPanel.add(new JLabel("Search by Surname:"), "growx, pushx");
 		searchPanel.add(searchBySurnameField = new JTextField(20), "width 200:200:200, growx, pushx");
-		searchBySurnameField.addActionListener(this);
+		searchBySurnameField.addActionListener(e -> controller.searchEmployeeBySurname());
 		searchBySurnameField.setDocument(new JTextFieldLimit(20));
 		searchPanel.add(
 				searchSurname = new JButton("Go"), "width 35:35:35, height 20:20:20, growx, pushx, wrap");
-		searchSurname.addActionListener(this);
+		searchSurname.addActionListener(e -> controller.searchEmployeeBySurname());
 		searchSurname.setToolTipText("Search Model.Employee By Surname");
 
 		return searchPanel;
@@ -375,14 +380,14 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 
 	// display search by ID dialog
 	private void displaySearchByIdDialog() {
-		if (isSomeoneToDisplay())
-		new SearchByIdDialog(EmployeeDetails.this);
+		if (controller.isSomeoneToDisplay())
+		new SearchByIdDialog(EmployeeDetails.this, this.controller);
 	}// end displaySearchByIdDialog
 
 	// display search by surname dialog
 	private void displaySearchBySurnameDialog() {
-		if (isSomeoneToDisplay())
-		new SearchBySurnameDialog(EmployeeDetails.this);
+		if (controller.isSomeoneToDisplay())
+		new SearchBySurnameDialog(EmployeeDetails.this, this.controller);
 	}// end displaySearchBySurnameDialog
 
 	// find byte start in file for first active record
@@ -1071,10 +1076,12 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 		} else if (e.getSource() == searchBySurname) {
 			if (checkInput() && !controller.checkForChanges())
 				displaySearchBySurnameDialog();
-		} else if (e.getSource() == searchId || e.getSource() == searchByIdField)
-			searchEmployeeById();
-		else if (e.getSource() == searchSurname || e.getSource() == searchBySurnameField)
-			searchEmployeeBySurname();
+		}
+//
+//		else if (e.getSource() == searchId || e.getSource() == searchByIdField)
+//			searchEmployeeById();
+//		else if (e.getSource() == searchSurname || e.getSource() == searchBySurnameField)
+//			searchEmployeeBySurname();
 
 //		else if (e.getSource() == saveChange) {
 //			if (checkInput() && !controller.checkForChanges())
@@ -1105,7 +1112,7 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 //			}
 		} else if (e.getSource() == listAll || e.getSource() == displayAll) {
 			if (checkInput() && !controller.checkForChanges())
-				if (isSomeoneToDisplay())
+				if (controller.isSomeoneToDisplay())
 					displayEmployeeSummaryDialog();
 		} else if (e.getSource() == create || e.getSource() == add) {
 			if (checkInput() && !controller.checkForChanges())
@@ -1120,10 +1127,11 @@ public class EmployeeDetails extends JFrame implements ActionListener, ItemListe
 //			if (checkInput() && !checkForChanges())
 //				deleteRecord();
 //		}
-		else if (e.getSource() == searchBySurname) {
-			if (checkInput() && !controller.checkForChanges())
-				new SearchBySurnameDialog(EmployeeDetails.this);
-		}
+		//Delete this as it will never be called
+//		else if (e.getSource() == searchBySurname) {
+//			if (checkInput() && !controller.checkForChanges())
+//				new SearchBySurnameDialog(EmployeeDetails.this);
+//		}
 	}// end actionPerformed
 
 	// content pane for main dialog
