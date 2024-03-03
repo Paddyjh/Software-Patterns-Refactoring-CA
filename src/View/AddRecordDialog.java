@@ -62,31 +62,31 @@ public class AddRecordDialog extends JDialog {
 
 		empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
 
-		empDetails.add(new JLabel("ID:"), "growx, pushx");
-		empDetails.add(idField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("ID:"), LAYOUT_GROW_PUSH);
+		empDetails.add(idField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 		idField.setEditable(false);
 
 
-		empDetails.add(new JLabel("PPS Number:"), "growx, pushx");
-		empDetails.add(ppsField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("PPS Number:"), LAYOUT_GROW_PUSH);
+		empDetails.add(ppsField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Surname:"), "growx, pushx");
-		empDetails.add(surnameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Surname:"), LAYOUT_GROW_PUSH);
+		empDetails.add(surnameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("First Name:"), "growx, pushx");
-		empDetails.add(firstNameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("First Name:"), LAYOUT_GROW_PUSH);
+		empDetails.add(firstNameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Gender:"), "growx, pushx");
-		empDetails.add(genderCombo = new JComboBox<String>(this.parent.gender), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Gender:"), LAYOUT_GROW_PUSH);
+		empDetails.add(genderCombo = new JComboBox<String>(this.parent.gender), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Department:"), "growx, pushx");
-		empDetails.add(departmentCombo = new JComboBox<String>(this.parent.department), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Department:"), LAYOUT_GROW_PUSH);
+		empDetails.add(departmentCombo = new JComboBox<String>(this.parent.department), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Salary:"), "growx, pushx");
-		empDetails.add(salaryField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Salary:"), LAYOUT_GROW_PUSH);
+		empDetails.add(salaryField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Full Time:"), "growx, pushx");
-		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Full Time:"), LAYOUT_GROW_PUSH);
+		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), LAYOUT_GROW_PUSH_WRAP);
 
 		buttonPanel.add(save = new JButton("Save"));
 		save.addActionListener(e -> controller.saveEmployeeRecord(this));

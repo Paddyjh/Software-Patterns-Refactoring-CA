@@ -26,13 +26,15 @@ import javax.swing.table.DefaultTableModel;
 
 import net.miginfocom.swing.MigLayout;
 
+import static Constants.UiConstants.LAYOUT_GROW_PUSH_WRAP;
+
 public class EmployeeSummaryDialog extends JDialog {
 	// vector with all Employees details
 	Vector<Object> allEmployees;
 	JButton back;
 	
 	public EmployeeSummaryDialog(Vector<Object> allEmployees) {
-		setTitle("Model.Employee Summary");
+		setTitle("Employee Summary");
 		setModal(true);
 		this.allEmployees = allEmployees;
 
@@ -105,8 +107,8 @@ public class EmployeeSummaryDialog extends JDialog {
 		back.addActionListener(e -> dispose());
 		back.setToolTipText("Return to main screen");
 		
-		summaryDialog.add(buttonPanel,"growx, pushx, wrap");
-		summaryDialog.add(scrollPane,"growx, pushx, wrap");
+		summaryDialog.add(buttonPanel,LAYOUT_GROW_PUSH_WRAP);
+		summaryDialog.add(scrollPane,LAYOUT_GROW_PUSH_WRAP);
 		scrollPane.setBorder(BorderFactory.createTitledBorder("Employee Details"));
 		
 		return summaryDialog;

@@ -173,7 +173,7 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 		JPanel searchPanel = new JPanel(new MigLayout());
 
 		searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
-		searchPanel.add(new JLabel("Search by ID:"), "growx, pushx");
+		searchPanel.add(new JLabel("Search by ID:"), LAYOUT_GROW_PUSH);
 		searchPanel.add(searchByIdField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "width 200:200:200, growx, pushx");
 		searchByIdField.addActionListener(e -> controller.searchEmployeeById());
 		searchByIdField.setDocument(new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT));
@@ -182,7 +182,7 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 		searchId.addActionListener(e -> controller.searchEmployeeById());
 		searchId.setToolTipText("Search Employee By ID");
 
-		searchPanel.add(new JLabel("Search by Surname:"), "growx, pushx");
+		searchPanel.add(new JLabel("Search by Surname:"), LAYOUT_GROW_PUSH);
 		searchPanel.add(searchBySurnameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "width 200:200:200, growx, pushx");
 		searchBySurnameField.addActionListener(e -> controller.searchEmployeeBySurname());
 		searchBySurnameField.setDocument(new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT));
@@ -229,16 +229,16 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 	private JPanel buttonPanel() {
 		JPanel buttonPanel = new JPanel();
 
-		buttonPanel.add(add = new JButton("Add Record"), "growx, pushx");
+		buttonPanel.add(add = new JButton("Add Record"), LAYOUT_GROW_PUSH);
 		add.addActionListener(e -> controller.addRecordController());
 		add.setToolTipText("Add new Employee Record");
-		buttonPanel.add(edit = new JButton("Edit Record"), "growx, pushx");
+		buttonPanel.add(edit = new JButton("Edit Record"), LAYOUT_GROW_PUSH);
 		edit.addActionListener(e -> controller.editDetails());
 		edit.setToolTipText("Edit current Employee");
-		buttonPanel.add(deleteButton = new JButton("Delete Record"), "growx, pushx, wrap");
+		buttonPanel.add(deleteButton = new JButton("Delete Record"), LAYOUT_GROW_PUSH_WRAP);
 		deleteButton.addActionListener(e -> controller.deleteRecord());
 		deleteButton.setToolTipText("Delete current Employee");
-		buttonPanel.add(displayAll = new JButton("List all Records"), "growx, pushx");
+		buttonPanel.add(displayAll = new JButton("List all Records"), LAYOUT_GROW_PUSH);
 		displayAll.addActionListener(e -> controller.displayEmployeeSummaryDialog());
 		displayAll.setToolTipText("List all Registered Employees");
 
@@ -253,30 +253,30 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 
 		empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
 
-		empDetails.add(new JLabel("ID:"), "growx, pushx");
-		empDetails.add(idField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("ID:"), LAYOUT_GROW_PUSH);
+		empDetails.add(idField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 		idField.setEditable(false);
 
-		empDetails.add(new JLabel("PPS Number:"), "growx, pushx");
-		empDetails.add(ppsField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("PPS Number:"), LAYOUT_GROW_PUSH);
+		empDetails.add(ppsField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Surname:"), "growx, pushx");
-		empDetails.add(surnameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Surname:"), LAYOUT_GROW_PUSH);
+		empDetails.add(surnameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("First Name:"), "growx, pushx");
-		empDetails.add(firstNameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("First Name:"), LAYOUT_GROW_PUSH);
+		empDetails.add(firstNameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Gender:"), "growx, pushx");
-		empDetails.add(genderCombo = new JComboBox<String>(gender), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Gender:"), LAYOUT_GROW_PUSH);
+		empDetails.add(genderCombo = new JComboBox<String>(gender), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Department:"), "growx, pushx");
-		empDetails.add(departmentCombo = new JComboBox<String>(department), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Department:"), LAYOUT_GROW_PUSH);
+		empDetails.add(departmentCombo = new JComboBox<String>(department), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Salary:"), "growx, pushx");
-		empDetails.add(salaryField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Salary:"), LAYOUT_GROW_PUSH);
+		empDetails.add(salaryField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), LAYOUT_GROW_PUSH_WRAP);
 
-		empDetails.add(new JLabel("Full Time:"), "growx, pushx");
-		empDetails.add(fullTimeCombo = new JComboBox<String>(fullTime), "growx, pushx, wrap");
+		empDetails.add(new JLabel("Full Time:"), LAYOUT_GROW_PUSH);
+		empDetails.add(fullTimeCombo = new JComboBox<String>(fullTime), LAYOUT_GROW_PUSH_WRAP);
 
 		buttonPanel.add(saveChange = new JButton("Save"));
 		saveChange.addActionListener(e -> controller.saveEmployeeEdits());
