@@ -14,6 +14,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Random;
 import java.util.Vector;
 
+import static Constants.UiConstants.*;
+
 public class EmployeeController {
     // hold object start position in file
     private long currentByteStart = 0;
@@ -63,9 +65,14 @@ public class EmployeeController {
         return generatedfileName;
     }// end getFileName
 
+    public long getCurrentByte(){
+        return this.currentByteStart;
+    }
+
+
     public void saveEmployeeRecord(AddRecordDialog view) {
         // Validate inputs from the view
-        if (view.checkInput()) {
+        if (view.checkInput() && !checkForChanges()) {
             // Extract data from view and create an Employee object
             // Call model methods to save the Employee object
             addEmployeeRecord(view);
@@ -209,7 +216,7 @@ public class EmployeeController {
 
         boolean ppsExist = false;
         // check for correct PPS format based on assignment description
-        if (pps.length() == 8 || pps.length() == 9) {
+        if (pps.length() == 8 || pps.length() == PPS_FIELD_LIMIT) {
             if (Character.isDigit(pps.charAt(0)) && Character.isDigit(pps.charAt(1))
                     && Character.isDigit(pps.charAt(2)) && Character.isDigit(pps.charAt(3))
                     && Character.isDigit(pps.charAt(4)) && Character.isDigit(pps.charAt(5))
@@ -433,13 +440,15 @@ public class EmployeeController {
 
     // activate field for editing
     public void editDetails() {
-        // activate field for editing if there is records to display
-        if (isSomeoneToDisplay()) {
-            // remove euro sign from salary text field
-            employeeDetailsView.getSalaryField().setText(employeeDetailsView.getFieldFormat().format(currentEmployee.getSalary()));
-            change = false;
-            employeeDetailsView.setEnabled(true);// enable text fields for editing
-        } // end if
+        if (employeeDetailsView.checkInput() && !checkForChanges()){
+            // activate field for editing if there is records to display
+            if (isSomeoneToDisplay()) {
+                // remove euro sign from salary text field
+                employeeDetailsView.getSalaryField().setText(employeeDetailsView.getFieldFormat().format(currentEmployee.getSalary()));
+                change = false;
+                employeeDetailsView.setEnabled(true);// enable text fields for editing
+            } // end if
+        }
     }// end editDetails
 
     // check if any changes text field where made
@@ -461,8 +470,8 @@ public class EmployeeController {
     }// end checkForChanges
 
     public void saveEmployeeEdits(){
-        employeeDetailsView.checkInput();
-        checkForChanges();
+        if (employeeDetailsView.checkInput())
+            checkForChanges();
     }
 
     public void searchEmployeeBySurnameController(SearchBySurnameDialog view) {
@@ -479,7 +488,7 @@ public class EmployeeController {
             view.dispose();
         } catch (NumberFormatException num) {
                 // display message and set colour to text field if entry is wrong
-                view.searchField.setBackground(new Color(255, 150, 150));
+                view.searchField.setBackground(ERROR_COLOR);
                 JOptionPane.showMessageDialog(null, "Wrong ID format!");
             }
     }
@@ -558,10 +567,10 @@ public class EmployeeController {
             } // end if
         } // end try
         catch (NumberFormatException e) {
-            employeeDetailsView.getSearchByIdField().setBackground(new Color(255, 150, 150));
+            employeeDetailsView.getSearchByIdField().setBackground(ERROR_COLOR);
             JOptionPane.showMessageDialog(null, "Wrong ID format!");
         } // end catch
-        employeeDetailsView.getSearchByIdField().setBackground(Color.WHITE);
+        employeeDetailsView.getSearchByIdField().setBackground(DEFAULT_BACKGROUND_COLOR);
         employeeDetailsView.getSearchByIdField().setText("");
     }// end searchEmployeeByID
 

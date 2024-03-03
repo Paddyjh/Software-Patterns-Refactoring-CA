@@ -19,7 +19,11 @@ import javax.swing.JTextField;
 
 import Controller.EmployeeController;
 import Model.Employee;
+import Model.ValidationFields;
+import Utility.ValidationUtil;
 import net.miginfocom.swing.MigLayout;
+
+import static Constants.UiConstants.*;
 
 public class AddRecordDialog extends JDialog {
 	//Controller to handle business logic and data handling
@@ -59,18 +63,18 @@ public class AddRecordDialog extends JDialog {
 		empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
 
 		empDetails.add(new JLabel("ID:"), "growx, pushx");
-		empDetails.add(idField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(idField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 		idField.setEditable(false);
 
 
 		empDetails.add(new JLabel("PPS Number:"), "growx, pushx");
-		empDetails.add(ppsField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(ppsField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("Surname:"), "growx, pushx");
-		empDetails.add(surnameField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(surnameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("First Name:"), "growx, pushx");
-		empDetails.add(firstNameField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(firstNameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("Gender:"), "growx, pushx");
 		empDetails.add(genderCombo = new JComboBox<String>(this.parent.gender), "growx, pushx, wrap");
@@ -79,7 +83,7 @@ public class AddRecordDialog extends JDialog {
 		empDetails.add(departmentCombo = new JComboBox<String>(this.parent.department), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("Salary:"), "growx, pushx");
-		empDetails.add(salaryField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(salaryField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("Full Time:"), "growx, pushx");
 		empDetails.add(fullTimeCombo = new JComboBox<String>(this.parent.fullTime), "growx, pushx, wrap");
@@ -95,14 +99,14 @@ public class AddRecordDialog extends JDialog {
 		for (int i = 0; i < empDetails.getComponentCount(); i++) {
 			empDetails.getComponent(i).setFont(this.parent.font1);
 			if (empDetails.getComponent(i) instanceof JComboBox) {
-				empDetails.getComponent(i).setBackground(Color.WHITE);
+				empDetails.getComponent(i).setBackground(DEFAULT_BACKGROUND_COLOR);
 			}// end if
 			else if (empDetails.getComponent(i) instanceof JTextField) {
 				field = (JTextField) empDetails.getComponent(i);
 				if (field == ppsField)
-					field.setDocument(new JTextFieldLimit(9));
+					field.setDocument(new JTextFieldLimit(PPS_FIELD_LIMIT));
 				else
-					field.setDocument(new JTextFieldLimit(20));
+					field.setDocument(new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT));
 			}// end else if
 		}// end for
 		idField.setText(Integer.toString(controller.getNextFreeId()));
@@ -124,60 +128,13 @@ public class AddRecordDialog extends JDialog {
 
 	// check for input in text fields
 	public boolean checkInput() {
-		boolean valid = true;
-		// if any of inputs are in wrong format, colour text field and display message
-		if (ppsField.getText().equals("")) {
-			ppsField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		}// end if
-		if (this.controller.correctPps(this.ppsField.getText().trim(), -1)) {
-			ppsField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		}// end if
-		if (surnameField.getText().isEmpty()) {
-			surnameField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		}// end if
-		if (firstNameField.getText().isEmpty()) {
-			firstNameField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		}// end if
-		if (genderCombo.getSelectedIndex() == 0) {
-			genderCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		}// end if
-		if (departmentCombo.getSelectedIndex() == 0) {
-			departmentCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		}// end if
-		try {// try to get values from text field
-			Double.parseDouble(salaryField.getText());
-			// check if salary is greater than 0
-			if (Double.parseDouble(salaryField.getText()) < 0) {
-				salaryField.setBackground(new Color(255, 150, 150));
-				valid = false;
-			}// end if
-		}// end try
-		catch (NumberFormatException num) {
-			salaryField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		}// end catch
-		if (fullTimeCombo.getSelectedIndex() == 0) {
-			fullTimeCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		}// end if
-		return valid;
+		ValidationFields validationFields = new ValidationFields(this.ppsField, this.surnameField, this.firstNameField,
+				this.salaryField, this.genderCombo, this.departmentCombo,
+				this.fullTimeCombo);
+
+		ValidationUtil validationUtil = new ValidationUtil();
+		return validationUtil.checkInputHelper(validationFields, this.controller, -1);
 	}// end checkInput
 
-	// set text field to white colour
-	public void setToWhite() {
-		ppsField.setBackground(Color.WHITE);
-		surnameField.setBackground(Color.WHITE);
-		firstNameField.setBackground(Color.WHITE);
-		salaryField.setBackground(Color.WHITE);
-		genderCombo.setBackground(Color.WHITE);
-		departmentCombo.setBackground(Color.WHITE);
-		fullTimeCombo.setBackground(Color.WHITE);
-	}// end setToWhite
 	
 }

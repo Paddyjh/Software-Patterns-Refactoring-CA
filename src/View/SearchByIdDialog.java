@@ -19,6 +19,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
+import static Constants.UiConstants.STANDARD_TEXT_FIELD_LIMIT;
+
 public class SearchByIdDialog extends JDialog {
 	EmployeeDetails parent;
 	EmployeeController controller;
@@ -54,9 +56,9 @@ public class SearchByIdDialog extends JDialog {
 		textPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.LOWERED));
 		textPanel.add(searchLabel = new JLabel("Enter ID:"));
 		searchLabel.setFont(this.parent.font1);
-		textPanel.add(searchField = new JTextField(20));
+		textPanel.add(searchField = new JTextField(STANDARD_TEXT_FIELD_LIMIT));
 		searchField.setFont(this.parent.font1);
-		searchField.setDocument(new JTextFieldLimit(20));
+		searchField.setDocument(new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT));
 		
 		buttonPanel.add(search = new JButton("Search"));
 		search.addActionListener(e -> controller.searchEmployeeByIdController(this));

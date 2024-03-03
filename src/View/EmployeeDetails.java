@@ -9,6 +9,8 @@ package View;
 
 import Controller.EmployeeController;
 import Model.Employee;
+import Model.ValidationFields;
+import Utility.ValidationUtil;
 import net.miginfocom.swing.MigLayout;
 
 import java.awt.BorderLayout;
@@ -43,6 +45,7 @@ import javax.swing.UIManager;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import static Constants.UiConstants.*;
 
 
 public class EmployeeDetails extends JFrame implements ItemListener, DocumentListener, WindowListener {
@@ -171,18 +174,18 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 
 		searchPanel.setBorder(BorderFactory.createTitledBorder("Search"));
 		searchPanel.add(new JLabel("Search by ID:"), "growx, pushx");
-		searchPanel.add(searchByIdField = new JTextField(20), "width 200:200:200, growx, pushx");
+		searchPanel.add(searchByIdField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "width 200:200:200, growx, pushx");
 		searchByIdField.addActionListener(e -> controller.searchEmployeeById());
-		searchByIdField.setDocument(new JTextFieldLimit(20));
+		searchByIdField.setDocument(new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT));
 		searchPanel.add(searchId = new JButton("Go"),
 				"width 35:35:35, height 20:20:20, growx, pushx, wrap");
 		searchId.addActionListener(e -> controller.searchEmployeeById());
 		searchId.setToolTipText("Search Employee By ID");
 
 		searchPanel.add(new JLabel("Search by Surname:"), "growx, pushx");
-		searchPanel.add(searchBySurnameField = new JTextField(20), "width 200:200:200, growx, pushx");
+		searchPanel.add(searchBySurnameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "width 200:200:200, growx, pushx");
 		searchBySurnameField.addActionListener(e -> controller.searchEmployeeBySurname());
-		searchBySurnameField.setDocument(new JTextFieldLimit(20));
+		searchBySurnameField.setDocument(new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT));
 		searchPanel.add(
 				searchSurname = new JButton("Go"), "width 35:35:35, height 20:20:20, growx, pushx, wrap");
 		searchSurname.addActionListener(e -> controller.searchEmployeeBySurname());
@@ -251,17 +254,17 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 		empDetails.setBorder(BorderFactory.createTitledBorder("Employee Details"));
 
 		empDetails.add(new JLabel("ID:"), "growx, pushx");
-		empDetails.add(idField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(idField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 		idField.setEditable(false);
 
 		empDetails.add(new JLabel("PPS Number:"), "growx, pushx");
-		empDetails.add(ppsField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(ppsField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("Surname:"), "growx, pushx");
-		empDetails.add(surnameField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(surnameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("First Name:"), "growx, pushx");
-		empDetails.add(firstNameField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(firstNameField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("Gender:"), "growx, pushx");
 		empDetails.add(genderCombo = new JComboBox<String>(gender), "growx, pushx, wrap");
@@ -270,7 +273,7 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 		empDetails.add(departmentCombo = new JComboBox<String>(department), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("Salary:"), "growx, pushx");
-		empDetails.add(salaryField = new JTextField(20), "growx, pushx, wrap");
+		empDetails.add(salaryField = new JTextField(STANDARD_TEXT_FIELD_LIMIT), "growx, pushx, wrap");
 
 		empDetails.add(new JLabel("Full Time:"), "growx, pushx");
 		empDetails.add(fullTimeCombo = new JComboBox<String>(fullTime), "growx, pushx, wrap");
@@ -293,13 +296,13 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 				field = (JTextField) empDetails.getComponent(i);
 				field.setEditable(false);
 				if (field == ppsField)
-					field.setDocument(new JTextFieldLimit(9));
+					field.setDocument(new JTextFieldLimit(PPS_FIELD_LIMIT));
 				else
-					field.setDocument(new JTextFieldLimit(20));
+					field.setDocument(new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT));
 				field.getDocument().addDocumentListener(this);
 			} // end if
 			else if (empDetails.getComponent(i) instanceof JComboBox) {
-				empDetails.getComponent(i).setBackground(Color.WHITE);
+				empDetails.getComponent(i).setBackground(DEFAULT_BACKGROUND_COLOR);
 				empDetails.getComponent(i).setEnabled(false);
 				((JComboBox<String>) empDetails.getComponent(i)).addItemListener(this);
 				((JComboBox<String>) empDetails.getComponent(i)).setRenderer(new DefaultListCellRenderer() {
@@ -404,51 +407,12 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 
 	// check for input in text fields
 	public boolean checkInput() {
-		boolean valid = true;
-		// if any of inputs are in wrong format, colour text field and display
-		// message
-		if (ppsField.isEditable() && ppsField.getText().trim().isEmpty()) {
-			ppsField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (ppsField.isEditable() && this.controller.correctPps(ppsField.getText().trim(), -2)) {
-			ppsField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (surnameField.isEditable() && surnameField.getText().trim().isEmpty()) {
-			surnameField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (firstNameField.isEditable() && firstNameField.getText().trim().isEmpty()) {
-			firstNameField.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (genderCombo.getSelectedIndex() == 0 && genderCombo.isEnabled()) {
-			genderCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		if (departmentCombo.getSelectedIndex() == 0 && departmentCombo.isEnabled()) {
-			departmentCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
-		try {// try to get values from text field
-			Double.parseDouble(salaryField.getText());
-			// check if salary is greater than 0
-			if (Double.parseDouble(salaryField.getText()) < 0) {
-				salaryField.setBackground(new Color(255, 150, 150));
-				valid = false;
-			} // end if
-		} // end try
-		catch (NumberFormatException num) {
-			if (salaryField.isEditable()) {
-				salaryField.setBackground(new Color(255, 150, 150));
-				valid = false;
-			} // end if
-		} // end catch
-		if (fullTimeCombo.getSelectedIndex() == 0 && fullTimeCombo.isEnabled()) {
-			fullTimeCombo.setBackground(new Color(255, 150, 150));
-			valid = false;
-		} // end if
+		ValidationFields validationFields = new ValidationFields(this.ppsField, this.surnameField, this.firstNameField,
+				this.salaryField, this.genderCombo, this.departmentCombo,
+				this.fullTimeCombo);
+
+		ValidationUtil validationUtil = new ValidationUtil();
+		boolean valid = validationUtil.checkInputHelper(validationFields, this.controller, -2);
 		// display message if any input or format is wrong
 		if (!valid)
 			JOptionPane.showMessageDialog(null, "Wrong values or format! Please check!");
@@ -526,17 +490,17 @@ public class EmployeeDetails extends JFrame implements ItemListener, DocumentLis
 	// DocumentListener methods
 	public void changedUpdate(DocumentEvent d) {
 		controller.setChange(true);
-		new JTextFieldLimit(20);
+		new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT);
 	}
 
 	public void insertUpdate(DocumentEvent d) {
 		controller.setChange(true);
-		new JTextFieldLimit(20);
+		new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT);
 	}
 
 	public void removeUpdate(DocumentEvent d) {
 		controller.setChange(true);
-		new JTextFieldLimit(20);
+		new JTextFieldLimit(STANDARD_TEXT_FIELD_LIMIT);
 	}
 
 	// ItemListener method
