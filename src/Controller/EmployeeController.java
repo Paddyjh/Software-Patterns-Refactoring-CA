@@ -19,7 +19,7 @@ import static Constants.UiConstants.*;
 public class EmployeeController {
     // hold object start position in file
     private long currentByteStart = 0;
-    private RandomFile application = new RandomFile();
+    private RandomFile application = RandomFile.getInstance();
     // hold file name and path for current file in use
     private File file;
     private boolean change = false;

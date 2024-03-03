@@ -10,8 +10,20 @@ import java.io.RandomAccessFile;
 import javax.swing.JOptionPane;
 
 public class RandomFile {
+	private static RandomFile instance;
 	private RandomAccessFile output;
 	private RandomAccessFile input;
+
+	private RandomFile() {
+
+	}
+
+	public static RandomFile getInstance() {
+		if (instance == null) {
+			instance = new RandomFile();
+		}
+		return instance;
+	}
 
 	// Create new file
 	public void createFile(String fileName) {
