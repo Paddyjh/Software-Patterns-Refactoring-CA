@@ -1,4 +1,5 @@
 import Controller.EmployeeController;
+import Controller.FileHandler;
 import View.EmployeeDetails;
 
 public class App {
@@ -7,8 +8,10 @@ public class App {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 EmployeeDetails employeeDetailsView = new EmployeeDetails();
-                EmployeeController controller = new EmployeeController(employeeDetailsView);
+                FileHandler fileHandler = new FileHandler();
+                EmployeeController controller = new EmployeeController(employeeDetailsView,fileHandler);
                 employeeDetailsView.setController(controller);
+                fileHandler.setController(controller);
             }
         });
     }//
